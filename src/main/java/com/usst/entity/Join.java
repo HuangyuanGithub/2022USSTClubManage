@@ -7,4 +7,5 @@ public class Join {
     private Integer id;
     private String clubName;
     private String introduction;
+    private Integer flag;
 }

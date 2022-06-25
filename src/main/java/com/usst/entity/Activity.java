@@ -11,4 +11,6 @@ public class Activity {
     private Integer clubId;
     private String introduction;
     private Date date;
+    private Integer flag;
+    private String studentName;
 }
