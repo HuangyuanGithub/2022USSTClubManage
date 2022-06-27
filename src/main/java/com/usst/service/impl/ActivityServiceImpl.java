@@ -23,4 +23,9 @@ public class ActivityServiceImpl implements ActivityService {
         return activityDao.getActivityById(id);
     }
 
+    @Override
+    public Integer deleActivity(Integer id) {
+        return activityDao.deleActivity(id);
+    }
+
 }

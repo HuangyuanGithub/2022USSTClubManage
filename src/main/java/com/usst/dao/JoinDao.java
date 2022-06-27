@@ -3,6 +3,8 @@ package com.usst.dao;
 import com.usst.entity.Belong;
 import com.usst.entity.Join;
 import com.usst.vo.StudentActivity;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,4 +23,13 @@ public interface JoinDao {
             "left join tb_student as S on J.student_id = S.id \n" +
             "where J.activity_id = #{id}")
     List<StudentActivity> getActivityJoin(Integer id);
+
+
+
+
+    @Delete("delete from tb_join where student_id = #{studentId} and activity_id = #{activityId}")
+    Integer deleteJoin(Join join);
+
+    @Insert("insert into tb_join (student_id,activity_id) values (#{studentId} , #{activityId})")
+    Integer addJoin(Join join);
 }

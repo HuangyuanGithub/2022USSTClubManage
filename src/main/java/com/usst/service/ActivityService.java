@@ -9,5 +9,5 @@ public interface ActivityService {
 
     Activity getActivityById(Integer id);
 
-
+    Integer deleActivity(Integer id);
 }

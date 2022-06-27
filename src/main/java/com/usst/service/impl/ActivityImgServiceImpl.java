@@ -17,4 +17,14 @@ public class ActivityImgServiceImpl implements ActivityImgService {
     public List<ActivityImg> getActivityImg(Integer id) {
         return activityImgDao.getActivityImg(id);
     }
+
+    @Override
+    public Integer deleteActivityImg(Integer id) {
+        return activityImgDao.deleteActivityImg(id);
+    }
+
+    @Override
+    public Integer addActivityImg(ActivityImg activityImg) {
+        return activityImgDao.addActivityImg(activityImg);
+    }
 }

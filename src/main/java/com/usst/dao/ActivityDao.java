@@ -1,6 +1,7 @@
 package com.usst.dao;
 
 import com.usst.entity.Activity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -15,6 +16,10 @@ public interface ActivityDao {
 
     @Select("select * from tb_activity where id = #{id}")
     Activity getActivityById(Integer id);
+
+
+    @Delete("delete form tb_activity where id = #{id}")
+    Integer deleActivity(Integer id);
 
 
 

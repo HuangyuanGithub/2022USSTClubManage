@@ -21,5 +21,17 @@ public class ActivityImgController {
         return activityImgService.getActivityImg(id);
     }
 
+    @RequestMapping("/delete/{id}")
+    Integer deleteActivityImg(Integer id){
+        return activityImgService.deleteActivityImg(id);
+    }
+
+    @RequestMapping("/add/{activityId}/{path}")
+    Integer addActivityImg(@PathVariable Integer activityId,@PathVariable String path){
+        ActivityImg activityImg = new ActivityImg();
+        activityImg.setActivityId(activityId);
+        activityImg.setPath(path);
+        return activityImgService.addActivityImg(activityImg);
+    }
 
 }

@@ -23,4 +23,18 @@ public class ClubImgController {
         return clubImgService.getClubImg(id);
     }
 
+
+    @RequestMapping("/delete/{id}")
+    Integer deleteClubImg(Integer id){
+        return clubImgService.deleteClubImg(id);
+    }
+
+    @RequestMapping("/add/{clubId}/{path}")
+    Integer addActivityImg(@PathVariable Integer clubId,@PathVariable String path){
+        ClubImg clubImg = new ClubImg();
+        clubImg.setClubId(clubId);
+        clubImg.setPath(path);
+        return clubImgService.addClubImg(clubImg);
+    }
+
 }

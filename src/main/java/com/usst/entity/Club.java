@@ -8,5 +8,5 @@ public class Club {
     private String clubName;
     private String introduction;
     private Integer flag;
-    private Integer studentName;
+    private Integer studentId;
 }

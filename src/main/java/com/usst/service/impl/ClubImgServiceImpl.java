@@ -17,4 +17,14 @@ public class ClubImgServiceImpl implements ClubImgService {
     public List<ClubImg> getClubImg(Integer id) {
         return clubImgDao.getClubImg(id);
     }
+
+    @Override
+    public Integer deleteClubImg(Integer id) {
+        return clubImgDao.deleteClubImg(id);
+    }
+
+    @Override
+    public Integer addClubImg(ClubImg clubImg) {
+        return clubImgDao.addClubImg(clubImg);
+    }
 }

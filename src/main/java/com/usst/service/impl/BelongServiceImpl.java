@@ -23,4 +23,14 @@ public class BelongServiceImpl implements BelongService {
     public List<StudentClub> getClubBelong(Integer id) {
         return belongDao.getClubBelong(id);
     }
+
+    @Override
+    public Integer addBelong(Belong belong) {
+        return belongDao.addBelong(belong);
+    }
+
+    @Override
+    public Integer deleteBelong(Belong belong) {
+        return belongDao.deleteBelong(belong);
+    }
 }

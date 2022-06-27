@@ -22,4 +22,14 @@ public class LeaderServiceImpl implements LeaderService {
     public List<LeaderStudent> getOwnClub(Integer id) {
         return leaderDao.getClubLeader(id);
     }
+
+    @Override
+    public Integer deleteLeader(Integer studentId, Integer clubId) {
+        return leaderDao.deleteLeader(studentId,clubId);
+    }
+
+    @Override
+    public Integer addLeader(Integer studentId, Integer clubId) {
+        return leaderDao.deleteLeader(studentId, clubId);
+    }
 }

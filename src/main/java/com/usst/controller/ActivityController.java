@@ -25,7 +25,10 @@ public class ActivityController {
         return activityService.getActivityById(id);
     }
 
-
+    @RequestMapping("/delete/{id}")
+    public Integer deleActivity(@PathVariable Integer id) {
+        return activityService.deleActivity(id);
+    }
 
 
 }

@@ -23,6 +23,11 @@ public class ClubController {
         return clubService.getClubById(id);
     }
 
+    @RequestMapping("delete/{id}")
+    Integer deleteClub(Integer id){
+        return clubService.deleteClub(id);
+    }
+
 
 
 

@@ -7,5 +7,4 @@ public class ClubImg {
     private Integer id;
     private Integer clubId;
     private String path;
-    private String introduction;
 }

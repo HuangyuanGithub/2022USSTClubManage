@@ -1,6 +1,8 @@
 package com.usst.dao;
 
 import com.usst.vo.LeaderStudent;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,6 +21,12 @@ public interface LeaderDao {
             "left join tb_club as C on club_id = C.id\n" +
             "where student_id = #{id}")
     List<LeaderStudent> getOwnClub(Integer id);
+
+    @Delete("delete from tb_leader where student_id = #{studentId} and club_id = #{clubId}")
+    Integer deleteLeader(Integer studentId,Integer clubId);
+
+    @Insert("insert into tb_leader (student_id,club_id) values (#{studentId},#{clubId})")
+    Integer addLeader(Integer studentId,Integer clubId);
 
 
 

@@ -22,4 +22,9 @@ public class ClubServiceImpl implements ClubService {
     public Club getClubById(Integer id) {
         return clubDao.getClubById(id);
     }
+
+    @Override
+    public Integer deleteClub(Integer id) {
+        return clubDao.deleteClub(id);
+    }
 }

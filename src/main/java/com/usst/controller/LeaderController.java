@@ -3,6 +3,7 @@ package com.usst.controller;
 import com.usst.service.LeaderService;
 import com.usst.vo.LeaderStudent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,17 @@ public class LeaderController {
         return leaderService.getOwnClub(studentId);
     }
 
+    @RequestMapping("/delete/{clubId}")
+    Integer deleteLeader(@PathVariable  Integer clubId,HttpSession session){
+        Integer studentId = (Integer) session.getAttribute("studentId");
+        return leaderService.deleteLeader(studentId,clubId);
+    }
+
+    @RequestMapping("/add/{clubId}")
+    Integer addLeader(@PathVariable Integer clubId,HttpSession session){
+        Integer studentId = (Integer) session.getAttribute("studentId");
+        return leaderService.addLeader(studentId,clubId);
+    }
 
 
 }
