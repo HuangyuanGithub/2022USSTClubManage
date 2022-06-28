@@ -10,7 +10,7 @@ public class Activity {
     private String name;
     private Integer clubId;
     private String introduction;
-    private Date date;
+    private String date;
     private Integer flag;
     private String studentName;
 }

@@ -12,11 +12,37 @@ import java.util.List;
 
 @Mapper
 public interface JoinDao {
-    @Select("select activity_id,J.student_id,A.name,club_name from tb_join as J \n" +
+    @Select("select activity_id,A.name as activityName,club_name,date from tb_join as J \n" +
             "left join tb_activity as A on J.activity_id = A.id \n" +
             "left join tb_club as C on A.club_id = C.id\n" +
-            "where J.student_id = #{id}")
-    List<StudentActivity> getStudentJoin(Integer id);
+            "where J.student_id = #{id} order by A.id desc limit ${(currentPage-1)*pageSize},#{pageSize}")
+    List<StudentActivity> getStudentJoin(Integer id,Integer currentPage,Integer pageSize);
+
+    @Select("select count(*) from tb_join as J \n" +
+            "left join tb_activity as A on J.activity_id = A.id \n" +
+            "left join tb_club as C on A.club_id = C.id\n" +
+            "where J.student_id = #{id} ")
+   Integer getStudentJoinSum(Integer id);
+
+
+
+    @Select("select activity_id,A.name as activityName,club_name,date from tb_join as J \n" +
+            "left join tb_activity as A on J.activity_id = A.id \n" +
+            "left join tb_club as C on A.club_id = C.id\n" +
+            "where J.student_id = #{id} and (club_name like CONCAT('%',#{keyWord},'%') or A.name like CONCAT('%',#{keyWord},'%')) \n" +
+            " order by A.id desc limit ${(currentPage-1)*pageSize},#{pageSize}")
+    List<StudentActivity> searchStudentJoin(Integer id,String keyWord,Integer currentPage,Integer pageSize);
+
+    @Select("select count(*) from tb_join as J \n" +
+            "left join tb_activity as A on J.activity_id = A.id \n" +
+            "left join tb_club as C on A.club_id = C.id\n" +
+            "where J.student_id = #{id} and (club_name like CONCAT('%',#{keyWord},'%') or A.name like CONCAT('%',#{keyWord},'%'))")
+    Integer searchStudentJoinSum(Integer id,String keyWord);
+
+
+
+
+
 
 
     @Select("select activity_id,J.student_id,name from tb_join as J \n" +

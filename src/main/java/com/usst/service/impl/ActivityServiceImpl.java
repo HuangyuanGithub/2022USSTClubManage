@@ -2,7 +2,10 @@ package com.usst.service.impl;
 
 import com.usst.dao.ActivityDao;
 import com.usst.entity.Activity;
+import com.usst.entity.Club;
 import com.usst.service.ActivityService;
+import com.usst.utils.Page;
+import com.usst.vo.StudentActivity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +17,19 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityDao activityDao;
 
     @Override
-    public List<Activity> getAllActivity() {
-        return activityDao.getAllActivity();
+    public Page<StudentActivity> getAllActivity(Integer currentPage, Integer pageSize) {
+        Page<StudentActivity> page=new Page<>();
+        page.setTotalCount(activityDao.getAllActivitySum());
+        page.setData(activityDao.getAllActivity(currentPage, pageSize));
+        return page;
+    }
+
+    @Override
+    public Page<StudentActivity> searchAllActivity(String keyWord, Integer currentPage, Integer pageSize) {
+        Page<StudentActivity> page=new Page<>();
+        page.setTotalCount(activityDao.searchAllActivitySum(keyWord));
+        page.setData(activityDao.searchAllActivity(keyWord,currentPage, pageSize));
+        return page;
     }
 
     @Override

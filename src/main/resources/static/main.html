@@ -30,7 +30,7 @@
 
         .box-card {
             width: 640px;
-            height: 300px;
+            height: 450px;
             margin-left: 50px;
             margin-top: 50px;
         }
@@ -68,66 +68,177 @@
                     <el-col :span="12">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>我参加的社团</span>
-                                <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                                <el-col :span="10">
+                                    <strong>我参加的社团</strong>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-input v-model="myClubKeyWord" placeholder="请输入内容"></el-input>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-button type="primary" icon="el-icon-search" @click="getMyClub()" class="w-100">搜索</el-button>
+                                </el-col>
                             </div>
-                            <div class="text item">
+                            <div>
+                                <template>
+                                    <el-table
+                                            :data="myClubList">
+                                        <el-table-column
+                                                type="index"
+                                                width="100">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="clubName"
+                                                label="社团名"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="num"
+                                                label="人数"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="操作">
+                                            <template slot-scope="scope">
+                                                <el-button type="primary" size="mini" @click="jumpClub(scope.row.id)">查看</el-button>
+                                            </template>
+                                        </el-table-column>
 
-                                <span class="demonstration">直接前往</span>
-                                <el-pagination
-                                        @size-change="handleSizeChange"
-                                        @current-change="handleCurrentChange"
-                                        :current-page.sync="currentPage3"
-                                        :page-size="5"
-                                        layout="prev, pager, next, jumper"
-                                        :total="1000">
-                                </el-pagination>
-
+                                    </el-table>
+                                </template>
                             </div>
+                            <div class="container my-5" align="center">
+                                <template>
+                                    <div class="block">
+                                        <el-pagination
+                                                @current-change="changeMyClubPage"
+                                                :page-size="myPageSize"
+                                                layout="total, prev, pager, next"
+                                                :total="myClubTotal">
+                                        </el-pagination>
+                                    </div>
+                                </template>
+                            </div>
+
                         </el-card>
                     </el-col>
 
                     <el-col :span="12">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>我参加的活动</span>
-                                <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                                <el-col :span="10">
+                                    <strong>我参加的活动</strong>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-input v-model="myActivityKeyWord" placeholder="请输入内容"></el-input>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-button type="primary" icon="el-icon-search" @click="getMyActivity()" class="w-100">搜索</el-button>
+                                </el-col>
                             </div>
-                            <div class="text item">
-                                <span class="demonstration">直接前往</span>
-                                <el-pagination
-                                        @size-change="handleSizeChange"
-                                        @current-change="handleCurrentChange"
-                                        :current-page.sync="currentPage3"
-                                        :page-size="5"
-                                        layout="prev, pager, next, jumper"
-                                        :total="1000">
-                                </el-pagination>
+                            <div>
+                                <template>
+                                    <el-table
+                                            :data="myActivityList">
+                                        <el-table-column
+                                                type="index"
+                                                width="100">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="activityName"
+                                                label="活动名"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="clubName"
+                                                label="社团名"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="date"
+                                                label="时间"
+                                                width="150">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="操作">
+                                            <template slot-scope="scope">
+                                                <el-button type="primary" size="mini" @click="jumpActivity(scope.row.id)">查看</el-button>
+                                            </template>
+                                        </el-table-column>
+
+                                    </el-table>
+                                </template>
                             </div>
+                            <div class="container my-5" align="center">
+                                <template>
+                                    <div class="block">
+                                        <el-pagination
+                                                @current-change="changeMyActivityPage"
+                                                :page-size="myPageSize"
+                                                layout="total, prev, pager, next"
+                                                :total="myActivityTotal">
+                                        </el-pagination>
+                                    </div>
+                                </template>
+                            </div>
+
                         </el-card>
                     </el-col>
                 </el-row>
-
-                <el-divider></i></el-divider>
-
-
+                <el-divider></el-divider>
                 <el-row>
                     <el-col :span="12">
                         <el-card class="box-card2">
                             <div slot="header" class="clearfix">
-                                <span>全部社团</span>
-                                <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                                <el-col :span="10">
+                                    <strong>全部社团</strong>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-input v-model="allClubKeyWord" placeholder="请输入内容"></el-input>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-button type="primary" icon="el-icon-search" @click="getAllClub()" class="w-100">搜索</el-button>
+                                </el-col>
                             </div>
-                            <div class="text item">
-                                <span class="demonstration">直接前往</span>
-                                <el-pagination
-                                        @size-change="handleSizeChange"
-                                        @current-change="handleCurrentChange"
-                                        :current-page.sync="currentPage3"
-                                        :page-size="5"
-                                        layout="prev, pager, next, jumper"
-                                        :total="1000">
-                                </el-pagination>
+                            <div>
+                            <template>
+                                <el-table
+                                        :data="allClubList"
+                                        >
+                                    <el-table-column
+                                            type="index"
+                                            width="100">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="clubName"
+                                            label="社团名"
+                                            width="180">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="num"
+                                            label="人数"
+                                            width="180">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="操作">
+                                        <template slot-scope="scope">
+                                            <el-button type="primary" size="mini" @click="jumpClub(scope.row.id)">查看</el-button>
+                                        </template>
+                                    </el-table-column>
+
+                                </el-table>
+                            </template>
+                            </div>
+                            <div class="container my-5" align="center">
+                                <template>
+                                    <div class="block">
+                                        <el-pagination
+                                                @current-change="changeAllClubPage"
+                                                :page-size="allPageSize"
+                                                layout="total, prev, pager, next"
+                                                :total="allClubTotal">
+                                        </el-pagination>
+                                    </div>
+                                </template>
                             </div>
                         </el-card>
                     </el-col>
@@ -135,20 +246,63 @@
                     <el-col :span="12">
                         <el-card class="box-card2">
                             <div slot="header" class="clearfix">
-                                <span>全部活动</span>
-                                <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                                <el-col :span="10">
+                                    <strong>全部活动</strong>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-input v-model="allActivityKeyWord" placeholder="请输入内容"></el-input>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-button type="primary" icon="el-icon-search" @click="getAllActivity()" class="w-100">搜索</el-button>
+                                </el-col>
                             </div>
-                            <div class="text item">
-                                <span class="demonstration">直接前往</span>
-                                <el-pagination
-                                        @size-change="handleSizeChange"
-                                        @current-change="handleCurrentChange"
-                                        :current-page.sync="currentPage3"
-                                        :page-size="5"
-                                        layout="prev, pager, next, jumper"
-                                        :total="1000">
-                                </el-pagination>
+                            <div>
+                                <template>
+                                    <el-table
+                                            :data="allActivityList"
+                                    >
+                                        <el-table-column
+                                                type="index"
+                                                width="100">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="activityName"
+                                                label="活动名"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="clubName"
+                                                label="社团名"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="date"
+                                                label="时间"
+                                                width="150">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="操作">
+                                            <template slot-scope="scope">
+                                                <el-button type="primary" size="mini" @click="jumpActivity(scope.row.id)">查看</el-button>
+                                            </template>
+                                        </el-table-column>
+
+                                    </el-table>
+                                </template>
                             </div>
+                            <div class="container my-5" align="center">
+                                <template>
+                                    <div class="block">
+                                        <el-pagination
+                                                @current-change="changeAllActivityPage"
+                                                :page-size="allPageSize"
+                                                layout="total, prev, pager, next"
+                                                :total="allActivityTotal">
+                                        </el-pagination>
+                                    </div>
+                                </template>
+                            </div>
+
                         </el-card>
                     </el-col>
                 </el-row>
@@ -169,50 +323,138 @@
 <script>
     new Vue({
         el: '#app',
-        data: {},
+        data: {
+            allClubList:[],
+            allActivityList:[],
+            myClubList:[],
+            myActivityList:[],
+
+            allPageSize:5,
+            myPageSize:4,
+
+
+            allClubCurrentPage:1,
+            allClubTotal:0,
+            allClubKeyWord:"",
+
+            myClubCurrentPage:1,
+            myClubTotal:0,
+            myClubKeyWord:"",
+
+            myActivityCurrentPage:1,
+            myActivityTotal:0,
+            myActivityKeyWord:"",
+
+            allActivityCurrentPage:1,
+            allActivityTotal:0,
+            allActivityKeyWord:"",
+
+
+
+
+        },
         mounted() {
+            this.getAllClub();
+            this.getMyClub();
+            this.getMyActivity();
+            this.getAllActivity();
 
         },
         methods: {
-            login() {
-                if (!this.login_student.phone) {
-                    this.$message({
-                        showClose: true,
-                        message: '未填写手机号',
-                        type: 'error'
+            getAllClub() {
+                if (this.allClubKeyWord=== "") {
+                    axios.post("/club/all/" + this.allClubCurrentPage + "/" + this.allPageSize).then((res) => {
+                        this.allClubTotal = res.data.totalCount;
+                        this.allClubList = res.data.data;
                     })
-                    return
-                }
-                if (!this.login_student.password) {
-                    this.$message({
-                        showClose: true,
-                        message: '未填写密码',
-                        type: 'error'
+                }else{
+                    axios.post("/club/search/"+ this.allClubKeyWord + "/" + this.allClubCurrentPage + "/" + this.allPageSize).then((res) => {
+                        this.allClubTotal = res.data.totalCount;
+                        this.allClubList = res.data.data;
+
                     })
-                    return
+
                 }
-                axios.post("/student/login", this.login_student).then((res) => {
-                    if (res.data !== "") {
-                        //登录成功跳转页面
-                        this.$message({
-                            showClose: true,
-                            message: '登录成功',
-                            type: 'success'
-                        })
-                        setTimeout("location.href=\"/goods.html\"", 1000)
-                    } else {
-                        //登录失败
-                        this.$message({
-                            showClose: true,
-                            message: '用户名或密码错误',
-                            type: 'error'
-                        });
-                    }
-                })
+            },
+            changeAllClubPage(currentPage) {
+                this.allClubCurrentPage = currentPage;
+                this.getAllClub();
+            },
+            jumpClub(id){
+
+            },
+
+            getMyClub() {
+                if (this.myClubKeyWord=== "") {
+                    axios.post("/belong/student/" + this.myClubCurrentPage + "/" + this.myPageSize).then((res) => {
+                        this.myClubTotal = res.data.totalCount;
+                        this.myClubList = res.data.data;
+                    })
+                }else{
+                    axios.post("/belong/searchStudent/"+ this.myClubKeyWord + "/" + this.myClubCurrentPage + "/" + this.myPageSize).then((res) => {
+                        this.myClubTotal = res.data.totalCount;
+                        this.myClubList = res.data.data;
+
+                    })
+
+                }
+            },
+            changeMyClubPage(currentPage) {
+                this.myClubCurrentPage = currentPage;
+                this.getMyClub();
             },
 
 
-        }
+
+            getMyActivity() {
+                if (this.myActivityKeyWord=== "") {
+                    axios.post("/join/student/" + this.myActivityCurrentPage + "/" + this.myPageSize).then((res) => {
+                        this.myActivityTotal = res.data.totalCount;
+                        this.myActivityList = res.data.data;
+                    })
+                }else{
+                    axios.post("/join/searchStudent/"+ this.myActivityKeyWord + "/" + this.myActivityCurrentPage + "/" + this.myPageSize).then((res) => {
+                        this.myActivityTotal = res.data.totalCount;
+                        this.myActivityList = res.data.data;
+
+                    })
+
+                }
+            },
+            changeMyActivityPage(currentPage) {
+                this.myActivityCurrentPage = currentPage;
+                this.getMyActivity();
+            },
+
+
+
+            getAllActivity() {
+                if (this.allActivityKeyWord=== "") {
+                    axios.post("/activity/all/" + this.allActivityCurrentPage + "/" + this.allPageSize).then((res) => {
+                        this.allActivityTotal = res.data.totalCount;
+                        this.allActivityList = res.data.data;
+                    })
+                }else{
+                    axios.post("/activity/search/"+ this.allActivityKeyWord + "/" + this.allActivityCurrentPage + "/" + this.allPageSize).then((res) => {
+                        this.allActivityTotal = res.data.totalCount;
+                        this.allActivityList = res.data.data;
+
+                    })
+
+                }
+            },
+            changeAllActivityPage(currentPage) {
+                this.allActivityCurrentPage = currentPage;
+                this.getAllActivity();
+            },
+
+            jumpActivity(id){
+
+            },
+
+
+
+        },
     })
 </script>
 </html>

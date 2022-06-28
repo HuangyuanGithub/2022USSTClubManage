@@ -9,4 +9,5 @@ public class StudentActivity {
     private int studentId;
     private String name; //学生名字
     private String clubName;
+    private String date;
 }

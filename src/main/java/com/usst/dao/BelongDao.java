@@ -12,14 +12,35 @@ import java.util.List;
 @Mapper
 public interface BelongDao {
 
-    @Select("select club_id,B.student_id,club_name from tb_belong as B left join tb_club as C\n" +
+    @Select("select club_id,B.student_id,club_name,num from tb_belong as B left join tb_club as C\n" +
+            "on B.club_id = C.id where B.student_id = #{id} order by num desc\n" +
+            "limit ${(currentPage-1)*pageSize},#{pageSize}")
+    List<StudentClub> getStudentBelong(Integer id,Integer currentPage,Integer pageSize);
+
+    @Select("select count(*) from tb_belong as B left join tb_club as C\n" +
             "on B.club_id = C.id where B.student_id = #{id}")
-    List<StudentClub> getStudentBelong(Integer id);
+    Integer getStudentBelongSum(Integer id);
+
+    @Select("select club_id,B.student_id,club_name,num from tb_belong as B left join tb_club as C\n" +
+            "on B.club_id = C.id where B.student_id = #{id} and club_name like CONCAT('%',#{keyWord},'%')\n" +
+            "order by num desc \n" +
+            "limit ${(currentPage-1)*pageSize},#{pageSize}")
+    List<StudentClub> searchStudentBelong(Integer id,String keyWord,Integer currentPage,Integer pageSize);
+
+    @Select("select count(*) from tb_belong as B left join tb_club as C\n" +
+            "on B.club_id = C.id where B.student_id = #{id} and club_name like CONCAT('%',#{keyWord},'%')")
+    Integer searchStudentBelongSum(Integer id,String keyWord);
+
+
+
+
 
 
     @Select("select club_id,B.student_id,S.name from tb_belong as B left join tb_student as S\n" +
             "on B.student_id = S.id where B.club_id = #{id}")
     List<StudentClub> getClubBelong(Integer id);
+
+
 
     @Delete("delete from tb_belong where student_id = #{studentId} and club_id = #{clubId}")
     Integer deleteBelong(Belong belong);

@@ -8,4 +8,5 @@ public class StudentClub {
     private String clubName;
     private int studentId;
     private String name;
+    private Integer num;
 }

@@ -2,6 +2,7 @@ package com.usst.controller;
 
 import com.usst.entity.Belong;
 import com.usst.service.BelongService;
+import com.usst.utils.Page;
 import com.usst.vo.StudentClub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +19,18 @@ public class BelongController {
     private BelongService belongService;
 
 
-    @RequestMapping("/student")
-    public List<StudentClub> getStudentBelong(Integer id) {
-        return belongService.getStudentBelong(id);
+    @RequestMapping("/student/{currentPage}/{pageSize}")
+    public Page<StudentClub> getStudentBelong(@PathVariable Integer currentPage,@PathVariable Integer pageSize,HttpSession session) {
+        Integer id = (Integer) session.getAttribute("studentId");
+        return belongService.getStudentBelong(id,currentPage,pageSize);
     }
+    @RequestMapping("/searchStudent/{keyWord}/{currentPage}/{pageSize}")
+    public Page<StudentClub> getStudentBelong(@PathVariable String keyWord,@PathVariable Integer currentPage,@PathVariable Integer pageSize,HttpSession session) {
+        Integer id = (Integer) session.getAttribute("studentId");
+        return belongService.searchStudentBelong(id,keyWord,currentPage,pageSize);
+    }
+
+
 
     @RequestMapping("/club")
     public List<StudentClub> getClubBelong(Integer id) {
