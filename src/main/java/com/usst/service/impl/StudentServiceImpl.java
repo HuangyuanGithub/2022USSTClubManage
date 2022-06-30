@@ -31,14 +31,14 @@ public class StudentServiceImpl implements StudentService {
 
     //用户注册
     @Override
-    public void studentRegister(String phone, String password, String name,String sex) {
-        studentDao.studentRegister(phone,password,name,sex);
+    public void studentRegister(String phone, String password, String name) {
+        studentDao.studentRegister(phone,password,name);
     }
 
     //密码修改
     @Override
-    public void changePassword(String password, Integer studentId) {
-        studentDao.changePassword(password,studentId);
+    public Integer changePassword(String password, Integer studentId) {
+        return studentDao.changePassword(password,studentId);
     }
 
 

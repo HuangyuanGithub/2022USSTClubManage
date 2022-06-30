@@ -3,10 +3,7 @@ package com.usst.controller;
 import com.usst.entity.Student;
 import com.usst.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -39,7 +36,7 @@ public class StudentController {
     //用户注册
     @RequestMapping("/register")
     public Integer studentRegister(@RequestBody Student student,HttpSession session){
-        studentService.studentRegister(student.getPhone(),student.getPassword(),student.getName(),student.getSex());
+        studentService.studentRegister(student.getPhone(),student.getPassword(),student.getName());
         Integer studentId = studentService.studentLogin(student.getPhone(),student.getPassword());
         session.setAttribute("studentId",studentId);
         return studentId;
@@ -47,22 +44,31 @@ public class StudentController {
 
 
     //密码修改
-    @RequestMapping("changePassword/{password}")
-    public void changePassword(@PathVariable String password,HttpSession session){
+    @RequestMapping("/changePassword/{oldPassword}/{newPassword}/{repeatPassword}")
+    public Integer changePassword(@PathVariable String oldPassword, @PathVariable String newPassword, @PathVariable String repeatPassword, HttpSession session){
+        System.out.println(oldPassword+"\n"+newPassword);
+        if(!newPassword.equals(repeatPassword)) return 0;
         Integer studentId = (Integer) session.getAttribute("studentId");
-        studentService.changePassword(password,studentId);
+        Student student = studentService.getStudentInfo(studentId);
+        if(!student.getPassword().equals(oldPassword)) return 2;
+        return studentService.changePassword(newPassword,studentId);
     }
 
 
     //获取用户信息
-    @RequestMapping("getStudentInfo")
+    @RequestMapping("/getStudentInfo")
     public Student getStudentInfo(HttpSession session){
         Integer studentId = (Integer) session.getAttribute("studentId");
         return studentService.getStudentInfo(studentId);
     }
 
+    @RequestMapping("/getInfo/{id}")
+    public Student getStudentInfo(@PathVariable  Integer id){
+        return studentService.getStudentInfo(id);
+    }
+
     //修改用户信息
-    @RequestMapping("changeStudentInfo")
+    @RequestMapping("/changeStudentInfo")
     public void changeStudentInfo(@RequestBody Student student,HttpSession session){
         Integer studentId = (Integer) session.getAttribute("studentId");
         student.setId(studentId);

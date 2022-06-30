@@ -32,8 +32,24 @@ public class JoinServiceImpl implements JoinService {
     }
 
     @Override
-    public List<StudentActivity> getActivityJoin(Integer id) {
-        return joinDao.getActivityJoin(id);
+    public Page<StudentActivity> getActivityJoin(Integer id,Integer currentPage,Integer pageSize) {
+        Page<StudentActivity> page=new Page<>();
+        page.setTotalCount(joinDao.getActivityJoinSum(id));
+        page.setData(joinDao.getActivityJoin(id,currentPage,pageSize));
+        return page;
+    }
+
+    @Override
+    public Page<StudentActivity> searchActivityJoin(Integer id, String keyWord, Integer currentPage, Integer pageSize) {
+        Page<StudentActivity> page=new Page<>();
+        page.setTotalCount(joinDao.searchActivityJoinSum(id,keyWord));
+        page.setData(joinDao.searchActivityJoin(id,keyWord,currentPage,pageSize));
+        return page;
+    }
+
+    @Override
+    public Integer isJoin(Integer activityId, Integer studentId) {
+        return joinDao.isJoin(activityId, studentId);
     }
 
     @Override

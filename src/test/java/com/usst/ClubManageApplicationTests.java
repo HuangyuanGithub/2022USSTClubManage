@@ -15,9 +15,5 @@ class ClubManageApplicationTests {
 
     @Autowired
     private BelongService belongService;
-    @Test
-    void belong(){
-        System.out.println(belongService.getClubBelong(1));
-    }
 
 }

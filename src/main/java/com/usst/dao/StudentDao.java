@@ -20,13 +20,13 @@ public interface StudentDao {
 
 
     //用户注册
-    @Insert("insert into tb_student(phone,password,name,sex) values (#{phone},#{password},#{name},#{sex})")
-    void studentRegister(String phone,String password,String name,String sex);
+    @Insert("insert into tb_student(phone,password,name) values (#{phone},#{password},#{name})")
+    void studentRegister(String phone,String password,String name);
 
 
     //用户修改密码
     @Update("update tb_student set password = #{password} where id = #{id}")
-    void changePassword(String password,Integer id);
+    Integer changePassword(String password,Integer id);
 
 
     //获取用户信息

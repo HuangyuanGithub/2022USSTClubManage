@@ -12,5 +12,12 @@ public interface ClubService {
 
     Integer deleteClub(Integer id);
 
+
     Page<Club> searchClub(String keyWord,Integer currentPage,Integer pageSize);
+
+    Integer addClub(Club club);
+
+    Integer clubIntro(String introduction,Integer id);
+
+    Integer clubNum(Integer id);
 }

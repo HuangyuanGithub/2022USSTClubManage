@@ -11,15 +11,15 @@ import java.util.List;
 @Mapper
 public interface LeaderDao {
 
-    @Select("select student_id,club_id,name from tb_leader\n" +
+    @Select("select L.student_id,club_id,name from tb_leader as L\n" +
             "left join tb_student as S on student_id = S.id\n" +
             "where club_id = #{id}")
     List<LeaderStudent> getClubLeader(Integer id);
 
 
-    @Select("select student_id,club_id,club_name from tb_leader\n" +
+    @Select("select L.student_id,club_id,club_name from tb_leader as L\n" +
             "left join tb_club as C on club_id = C.id\n" +
-            "where student_id = #{id}")
+            "where L.student_id = #{id}")
     List<LeaderStudent> getOwnClub(Integer id);
 
     @Delete("delete from tb_leader where student_id = #{studentId} and club_id = #{clubId}")

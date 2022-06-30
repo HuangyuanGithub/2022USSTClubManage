@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class Join {
     private Integer id;
-    private String clubName;
-    private String introduction;
-    private Integer flag;
+    private Integer studentId;
+    private Integer activityId;
 }

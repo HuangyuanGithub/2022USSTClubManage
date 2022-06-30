@@ -33,6 +33,22 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public Page<Activity> getClubActivity(Integer id,Integer currentPage, Integer pageSize) {
+        Page<Activity> page=new Page<>();
+        page.setTotalCount(activityDao.getClubActivitySum(id));
+        page.setData(activityDao.getClubActivity(id,currentPage, pageSize));
+        return page;
+    }
+
+    @Override
+    public Page<Activity> searchClubActivity(Integer id,String keyWord,Integer currentPage, Integer pageSize) {
+        Page<Activity> page=new Page<>();
+        page.setTotalCount(activityDao.searchClubActivitySum(id,keyWord));
+        page.setData(activityDao.searchClubActivity(id,keyWord,currentPage, pageSize));
+        return page;
+    }
+
+    @Override
     public Activity getActivityById(Integer id) {
         return activityDao.getActivityById(id);
     }
@@ -40,6 +56,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Integer deleActivity(Integer id) {
         return activityDao.deleActivity(id);
+    }
+
+    @Override
+    public Integer addActivity(Activity activity) {
+        return activityDao.addActivity(activity);
     }
 
 }

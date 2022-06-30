@@ -1,10 +1,392 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/bootstrap5/css/bootstrap.min.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" href="./js/element-ui/lib/theme-chalk/index.css">
+    <script src="./js/element-ui/lib/index.js"></script>
+    <title>学生主页</title>
+    <style>
+        .text {
+            font-size: 14px;
+        }
 
+        .item {
+            margin-bottom: 18px;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            content: "";
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .box-card {
+            width: 640px;
+            height: 450px;
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body style="background-color: #f7f7f7">
+<div id="app">
+    <el-container>
+        <el-header>
+            <div>
+                <el-button type="info"  @click="myreturn()">返回</el-button>
+            </div>
+            <div align="center">
+                <h2>管理社团</h2><br>
+                <h2>社团名称：{{club.clubName}}</h2>
+            </div>
+
+
+        </el-header>
+        <el-main>
+            <div class="container w-50">
+                社团介绍：<el-input
+                    type="textarea"
+                    :rows="5"
+                    v-model="club.introduction" placeholder="请输入内容"></el-input><br>
+
+
+            </div>
+            <div align="center">
+
+            </div>
+        </el-main>
+
+        <div class="container text-center mt-5 w-50">
+            <el-button type="primary" class="w-25" @click="updateClub()">修改社团</el-button>
+        </div>
+
+        <el-row>
+            <el-col :span="12">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <el-col :span="10">
+                            <strong>入团申请</strong>
+                        </el-col>
+                    </div>
+                    <div>
+                        <template>
+                            <el-table
+                                    :data="studentList">
+                                <el-table-column
+                                        type="index"
+                                        width="100">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="name"
+                                        label="姓名"
+                                        width="120">
+                                </el-table-column>
+                                <el-table-column
+                                        label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" size="mini" @click="jumpStudent(scope.row.studentId)">
+                                            查看
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        label="审核">
+                                    <template slot-scope="scope">
+                                        <el-button type="success" size="mini" @click="passAPP(scope.row.studentId)">
+                                            通过
+                                        </el-button>
+
+                                        <el-button type="warning" size="mini" @click="noAPP(scope.row.studentId)">
+                                            禁用
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+
+                            </el-table>
+                        </template>
+                    </div>
+                    <div class="container my-5" align="center">
+                        <template>
+                            <div class="block">
+                                <el-pagination
+                                        @current-change="changeStudentPage"
+                                        :page-size="pageSize"
+                                        layout="total, prev, pager, next"
+                                        :total="studentTotal">
+                                </el-pagination>
+                            </div>
+                        </template>
+                    </div>
+
+                </el-card>
+            </el-col>
+
+
+            <el-col :span="12">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <el-col :span="10">
+                            <strong>新的活动</strong>
+                        </el-col>
+                        <el-col :span="10">
+                            <el-input v-model="activityKeyWord" placeholder="请输入内容"></el-input>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-button type="primary" icon="el-icon-search" @click="getClubActivity()"
+                                       class="w-100">搜索
+                            </el-button>
+                        </el-col>
+                    </div>
+                    <div>
+                        <template>
+                            <el-table
+                                    :data="activityList">
+                                <el-table-column
+                                        type="index"
+                                        width="50">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="name"
+                                        label="活动名"
+                                        width="120">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="date"
+                                        label="时间"
+                                        width="150">
+                                </el-table-column>
+                                <el-table-column
+                                        label="操作"
+                                        width="80">
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" size="mini"
+                                                   @click="jumpActivity(scope.row.id)">查看
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        label="管理">
+                                    <template slot-scope="scope">
+                                        <el-button type="success" size="mini" @click="activityChange(scope.row.id)">
+                                            修改
+                                        </el-button>
+
+                                        <el-button type="warning" size="mini" @click="activityNo(scope.row.id)">
+                                            删除
+                                        </el-button>
+                                    </template>
+
+                                </el-table-column>
+
+                            </el-table>
+                        </template>
+                    </div>
+                    <div class="container my-5" align="center">
+                        <template>
+                            <div class="block">
+                                <el-pagination
+                                        @current-change="changeActivityPage"
+                                        :page-size="pageSize"
+                                        layout="total, prev, pager, next"
+                                        :total="activityTotal">
+                                </el-pagination>
+                            </div>
+                        </template>
+                    </div>
+
+                </el-card>
+            </el-col>
+        </el-row>
+
+        </el-main>
+    </el-container>
+
+    <el-dialog
+            title="提示"
+            :visible.sync="clubVisible"
+            width="30%"
+            >
+        <span>是否删除？</span>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="clubVisible = false">取 消</el-button>
+    <el-button type="primary" @click="deleClub()">确 定</el-button>
+  </span>
+    </el-dialog>
+
+
+
+    <el-dialog
+            title="提示"
+            :visible.sync="activityVisible"
+            width="30%"
+            >
+        <span>是否删除</span>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="activityVisible = false">取 消</el-button>
+    <el-button type="primary" @click="deleActivity()">确 定</el-button>
+  </span>
+    </el-dialog>
+
+</div>
 </body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            club:{},
+            clubId:0,
+            activityList: [],
+            studentList: [],
+            activityCurrentPage: 1,
+            activityTotal: 0,
+            activityKeyWord: "",
+            pageSize: 5,
+            studentCurrentPage: 1,
+            studentTotal: 0,
+
+            deleClubId:0,
+            deleActivityId:0,
+            activityVisible:false,
+            clubVisible:false,
+
+        },
+        mounted() {
+            let search = window.location.search
+            search = search.substr(1)
+            let params = search.split("=")
+            let id = params[1]
+            this.clubId = id;
+            axios.get("/club/" + this.clubId).then((res) => {
+                this.club = res.data
+            })
+            this.getInfo();
+            this.getClubStudent();
+            this.getClubActivity()
+
+        },
+        methods: {
+            myreturn(){
+                window.history.back(-1);
+            },
+            activityNo(id){
+                this.deleActivityId = id
+                this.activityVisible = true;
+
+            },
+            deleActivity(){
+                this.activityVisible = false;
+                axios.get("/activity/delete/"+this.deleActivityId).then((res)=>{
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout("location.reload()",1000)
+                })
+
+            },
+            activityChange(id){
+                location.href="/adminActivity.html?id="+id;
+            },
+            jumpStudent(id){
+              location.href="/student.html?id="+id;
+            },
+            jumpActivity(id){
+                location.href="/activity.html?id="+id;
+            },
+            changeActivityPage(currentPage) {
+                this.activityCurrentPage = currentPage;
+                this.getClubActivity();
+            },
+            changeStudentPage(currentPage) {
+                this.studentCurrentPage = currentPage;
+                this.getClubStudent();
+            },
+            onDetailsChange(file,fileList){
+                this.detailsList=fileList
+            },
+            getInfo(){
+                axios.get("/club/"+this.clubId).then((res)=>{
+                    this.club = res.data;
+                })
+
+            },
+            passAPP(id){
+                axios.get("/belong/pass/"+this.clubId+"/"+id).then((res)=>{
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout("location.reload()",1000)
+                })
+            },
+            noAPP(id){
+                axios.get("/belong/no/"+this.clubId+"/"+id).then((res)=>{
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout("location.reload()",1000)
+                })
+            },
+            getClubActivity() {
+                if (this.activityKeyWord === "") {
+                    axios.get("/activity/club/" + this.clubId + "/" + this.activityCurrentPage + "/" + this.pageSize).then((res) => {
+                        this.activityList = res.data.data;
+                        this.activityTotal = res.data.totalCount;
+                    })
+                } else {
+                    axios.get("/activity/clubSearch/" + this.clubId + "/" + this.activityKeyWord + "/" + this.activityCurrentPage + "/" + this.pageSize).then((res) => {
+                        this.activityList = res.data.data;
+                        this.activityTotal = res.data.totalCount;
+                    })
+                }
+            },
+
+            getClubStudent() {
+
+                    axios.get("/belong/clubAPP/" + this.clubId + "/" + this.studentCurrentPage + "/" + this.pageSize).then((res) => {
+                        this.studentList = res.data.data;
+                        this.studentTotal = res.data.totalCount;
+                    })
+
+            },
+
+            updateClub() {
+                let flag = true
+                if (!this.club.introduction) {
+                    flag = false
+                    this.$message({
+                        showClose: true,
+                        message: '未填写社团介绍',
+                        type: 'error'
+                    })
+                    return
+                }
+
+                if(flag){
+                    axios.get("/club/intro"+"/"+this.club.introduction+"/"+this.clubId).then((res)=>{
+                        this.$message({
+                            showClose: true,
+                            message: '操作成功',
+                            type: 'success'
+                        })
+                        setTimeout("location.reload()",1000)
+
+                    })
+                }
+            },
+        }
+    })
+</script>
 </html>

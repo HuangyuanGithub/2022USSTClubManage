@@ -14,14 +14,14 @@ public class ClubServiceImpl implements ClubService {
     @Autowired
     private ClubDao clubDao;
 
+
     @Override
     public Page<Club> getAllClub(Integer currentPage, Integer pageSize) {
-        Page<Club> page=new Page<>();
+        Page<Club> page = new Page<>();
         page.setTotalCount(clubDao.getAllClubSum());
         page.setData(clubDao.getAllClub(currentPage, pageSize));
         return page;
     }
-
 
 
     @Override
@@ -35,10 +35,30 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public Page<Club> searchClub(String keyWord,Integer currentPage,Integer pageSize) {
-        Page<Club> page=new Page<>();
+    public Page<Club> searchClub(String keyWord, Integer currentPage, Integer pageSize) {
+        Page<Club> page = new Page<>();
         page.setTotalCount(clubDao.searchClubSum(keyWord));
-        page.setData(clubDao.searchClub(keyWord,currentPage,pageSize));
+        page.setData(clubDao.searchClub(keyWord, currentPage, pageSize));
         return page;
     }
+
+    @Override
+    public Integer addClub(Club club) {
+        return clubDao.addClub(club);
+    }
+
+    @Override
+    public Integer clubIntro(String introduction, Integer id) {
+        return clubDao.clubIntro(introduction, id);
+    }
+
+    @Override
+    public Integer clubNum(Integer id) {
+        Club club = clubDao.getClubById(id);
+        Integer num = club.getNum()+1;
+        return clubDao.clubNum(num,id);
+    }
 }
+
+
+

@@ -1,10 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/bootstrap5/css/bootstrap.min.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" href="./js/element-ui/lib/theme-chalk/index.css">
+    <script src="./js/element-ui/lib/index.js"></script>
+
     <meta charset="UTF-8">
     <title>Title</title>
-</head>
-<body>
 
+    <style>
+        .text {
+            font-size: 14px;
+        }
+
+        .item {
+            margin-bottom: 18px;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            content: "";
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .box-card {
+            width: 640px;
+            height: 520px;
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+
+        .btn {
+            float: right;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body style="background-color: #f7f7f7">
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="5">
+                        <el-button type="info" @click="myreturn()">返回</el-button>
+                </el-col>
+                <el-col :span="14">
+                    <h1>个人信息管理</h1>
+                </el-col>
+                <el-col :span="5">
+                    <el-button type="warning" @click="exit()">退出登录</el-button>
+                </el-col>
+
+            </el-row>
+        </el-header>
+        <el-main>
+            <div style="background: whitesmoke">
+                <el-row>
+                    <el-col :span="12">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <el-col :span="10">
+                                    <strong>基本信息</strong>
+                                </el-col>
+                            </div>
+                            <div>
+                                姓名：
+                                <el-input v-model="student.name" placeholder="请输入内容"></el-input>
+                                <br><br>
+                                年级：
+                                <el-input v-model="student.grade" placeholder="请输入内容"></el-input>
+                                <br><br>
+                                专业：
+                                <el-input v-model="student.major" placeholder="请输入内容"></el-input>
+                                <br><br>
+                                个人简介：
+                                <el-input
+                                        type="textarea"
+                                        :rows="3"
+                                        placeholder="请输入内容"
+                                        v-model="student.introduction">
+                                </el-input>
+                                <br><br>
+
+                                <div align="center">
+                                    <el-button type="primary" @Click="changeInfo()">保存</el-button>
+                                </div>
+
+
+                            </div>
+                        </el-card>
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <el-col :span="10">
+                                    <strong>修改密码</strong>
+                                </el-col>
+                            </div>
+                            <div>
+                                输入原来的密码：
+                                <el-input placeholder="请输入密码" v-model="oldPassword" show-password></el-input>
+                                <br><br>
+                                输入新的密码：
+                                <el-input placeholder="请输入密码" v-model="newPassword" show-password></el-input>
+                                <br><br>
+                                再次输入新密码：
+                                <el-input placeholder="请输入密码" v-model="repeatPassword" show-password></el-input>
+                                <br><br>
+
+                                {{oldPassword}}
+                                {{newPassword}}
+                                <div align="center">
+                                    <el-button type="primary" @Click="changePassword()">确定</el-button>
+                                </div>
+
+                            </div>
+
+                        </el-card>
+                    </el-col>
+                </el-row>
+
+            </div>
+        </el-main>
+    </el-container>
+</div>
 </body>
 </html>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            student: {},
+            oldPassword: "",
+            newPassword: "",
+            repeatPassword: "",
+            flag: 0,
+        },
+        mounted() {
+            this.getInfo();
+
+
+        },
+        methods: {
+            myreturn(){
+                window.history.back(-1);
+            },
+            exit(){
+                location.href="/index.html";
+            },
+            getInfo() {
+                axios.post("/student/getStudentInfo/").then((res) => {
+                    this.student = res.data;
+                })
+            },
+            changeInfo() {
+                axios.post("/student/changeStudentInfo", this.student).then((res) => {
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout(1000)
+                    this.getInfo();
+                })
+
+
+            },
+            changePassword() {
+
+                axios.post("/student/changePassword/" + this.oldPassword + "/" + this.newPassword + "/" + this.repeatPassword).then((res) => {
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout("location.reload()", 1000)
+                })
+
+
+            }
+        }
+    })
+</script>

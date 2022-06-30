@@ -41,7 +41,8 @@
             margin-left: 50px;
             margin-top: 10px;
         }
-        .btn{
+
+        .btn {
             float: right;
             margin-right: 5px;
         }
@@ -56,8 +57,8 @@
                 <h1>
                     大学生社团管理系统
 
-                    <el-button type="info" class="btn">个人信息</el-button>
-                    <el-button type="success" class="btn">社团管理</el-button>
+                    <el-button type="info" class="btn" @click="jumpPerson()">个人信息</el-button>
+                    <el-button type="success" class="btn" @click="dialog()">社团管理</el-button>
                 </h1>
                 <br>
             </div>
@@ -75,7 +76,9 @@
                                     <el-input v-model="myClubKeyWord" placeholder="请输入内容"></el-input>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" icon="el-icon-search" @click="getMyClub()" class="w-100">搜索</el-button>
+                                    <el-button type="primary" icon="el-icon-search" @click="getMyClub()" class="w-100">
+                                        搜索
+                                    </el-button>
                                 </el-col>
                             </div>
                             <div>
@@ -99,7 +102,9 @@
                                         <el-table-column
                                                 label="操作">
                                             <template slot-scope="scope">
-                                                <el-button type="primary" size="mini" @click="jumpClub(scope.row.id)">查看</el-button>
+                                                <el-button type="primary" size="mini"
+                                                           @click="jumpClub(scope.row.clubId)">查看
+                                                </el-button>
                                             </template>
                                         </el-table-column>
 
@@ -132,7 +137,9 @@
                                     <el-input v-model="myActivityKeyWord" placeholder="请输入内容"></el-input>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" icon="el-icon-search" @click="getMyActivity()" class="w-100">搜索</el-button>
+                                    <el-button type="primary" icon="el-icon-search" @click="getMyActivity()"
+                                               class="w-100">搜索
+                                    </el-button>
                                 </el-col>
                             </div>
                             <div>
@@ -161,7 +168,9 @@
                                         <el-table-column
                                                 label="操作">
                                             <template slot-scope="scope">
-                                                <el-button type="primary" size="mini" @click="jumpActivity(scope.row.id)">查看</el-button>
+                                                <el-button type="primary" size="mini"
+                                                           @click="jumpActivity(scope.row.activityId)">查看
+                                                </el-button>
                                             </template>
                                         </el-table-column>
 
@@ -196,37 +205,41 @@
                                     <el-input v-model="allClubKeyWord" placeholder="请输入内容"></el-input>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" icon="el-icon-search" @click="getAllClub()" class="w-100">搜索</el-button>
+                                    <el-button type="primary" icon="el-icon-search" @click="getAllClub()" class="w-100">
+                                        搜索
+                                    </el-button>
                                 </el-col>
                             </div>
                             <div>
-                            <template>
-                                <el-table
-                                        :data="allClubList"
-                                        >
-                                    <el-table-column
-                                            type="index"
-                                            width="100">
-                                    </el-table-column>
-                                    <el-table-column
-                                            prop="clubName"
-                                            label="社团名"
-                                            width="180">
-                                    </el-table-column>
-                                    <el-table-column
-                                            prop="num"
-                                            label="人数"
-                                            width="180">
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="操作">
-                                        <template slot-scope="scope">
-                                            <el-button type="primary" size="mini" @click="jumpClub(scope.row.id)">查看</el-button>
-                                        </template>
-                                    </el-table-column>
+                                <template>
+                                    <el-table
+                                            :data="allClubList"
+                                    >
+                                        <el-table-column
+                                                type="index"
+                                                width="100">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="clubName"
+                                                label="社团名"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="num"
+                                                label="人数"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="操作">
+                                            <template slot-scope="scope">
+                                                <el-button type="primary" size="mini" @click="jumpClub(scope.row.id)">
+                                                    查看
+                                                </el-button>
+                                            </template>
+                                        </el-table-column>
 
-                                </el-table>
-                            </template>
+                                    </el-table>
+                                </template>
                             </div>
                             <div class="container my-5" align="center">
                                 <template>
@@ -253,7 +266,9 @@
                                     <el-input v-model="allActivityKeyWord" placeholder="请输入内容"></el-input>
                                 </el-col>
                                 <el-col :span="4">
-                                    <el-button type="primary" icon="el-icon-search" @click="getAllActivity()" class="w-100">搜索</el-button>
+                                    <el-button type="primary" icon="el-icon-search" @click="getAllActivity()"
+                                               class="w-100">搜索
+                                    </el-button>
                                 </el-col>
                             </div>
                             <div>
@@ -283,7 +298,9 @@
                                         <el-table-column
                                                 label="操作">
                                             <template slot-scope="scope">
-                                                <el-button type="primary" size="mini" @click="jumpActivity(scope.row.id)">查看</el-button>
+                                                <el-button type="primary" size="mini"
+                                                           @click="jumpActivity(scope.row.activityId)">查看
+                                                </el-button>
                                             </template>
                                         </el-table-column>
 
@@ -311,11 +328,45 @@
         <el-footer>
             <div align="center">
                 <h3>想有自己的社团？</h3>
-                <el-button type="primary">创建社团</el-button>
+                <el-button type="primary" @click="jumpCreate()">创建社团</el-button>
             </div>
             <br><br>
         </el-footer>
     </el-container>
+
+
+    <el-dialog
+            title="我管理的社团"
+            :visible.sync="dialogVisible"
+            width="30%"
+            >
+        <span>
+            <el-table
+                    :data="leaderList">
+
+
+                                        <el-table-column
+                                                prop="clubName"
+                                                label="社团名"
+                                                width="120">
+                                        </el-table-column>
+
+                                        <el-table-column
+                                                label="操作">
+                                            <template slot-scope="scope">
+                                                <el-button type="primary" size="mini"
+                                                           @click="jumpLeader(scope.row.clubId)">查看</el-button>
+                                            </template>
+                                        </el-table-column>
+
+                                    </el-table>
+
+
+
+        </span>
+
+        </span>
+    </el-dialog>
 
 
 </div>
@@ -324,32 +375,34 @@
     new Vue({
         el: '#app',
         data: {
-            allClubList:[],
-            allActivityList:[],
-            myClubList:[],
-            myActivityList:[],
+            allClubList: [],
+            allActivityList: [],
+            myClubList: [],
+            myActivityList: [],
 
-            allPageSize:5,
-            myPageSize:4,
-
-
-            allClubCurrentPage:1,
-            allClubTotal:0,
-            allClubKeyWord:"",
-
-            myClubCurrentPage:1,
-            myClubTotal:0,
-            myClubKeyWord:"",
-
-            myActivityCurrentPage:1,
-            myActivityTotal:0,
-            myActivityKeyWord:"",
-
-            allActivityCurrentPage:1,
-            allActivityTotal:0,
-            allActivityKeyWord:"",
+            allPageSize: 5,
+            myPageSize: 4,
 
 
+            allClubCurrentPage: 1,
+            allClubTotal: 0,
+            allClubKeyWord: "",
+
+            myClubCurrentPage: 1,
+            myClubTotal: 0,
+            myClubKeyWord: "",
+
+            myActivityCurrentPage: 1,
+            myActivityTotal: 0,
+            myActivityKeyWord: "",
+
+            allActivityCurrentPage: 1,
+            allActivityTotal: 0,
+            allActivityKeyWord: "",
+
+            dialogVisible: false,
+
+            leaderList:[],
 
 
         },
@@ -358,17 +411,31 @@
             this.getMyClub();
             this.getMyActivity();
             this.getAllActivity();
+            this.getLeader();
 
         },
         methods: {
+            dialog(){
+                 this.dialogVisible=true;
+            },
+            jumpLeader(id){
+                this.dialogVisible=false;
+                location.href="/adminClub.html?id="+id;
+            },
+            getLeader(){
+                axios.get("/leader/student").then((res) => {
+                    this.leaderList = res.data;
+
+                })
+            },
             getAllClub() {
-                if (this.allClubKeyWord=== "") {
+                if (this.allClubKeyWord === "") {
                     axios.post("/club/all/" + this.allClubCurrentPage + "/" + this.allPageSize).then((res) => {
                         this.allClubTotal = res.data.totalCount;
                         this.allClubList = res.data.data;
                     })
-                }else{
-                    axios.post("/club/search/"+ this.allClubKeyWord + "/" + this.allClubCurrentPage + "/" + this.allPageSize).then((res) => {
+                } else {
+                    axios.post("/club/search/" + this.allClubKeyWord + "/" + this.allClubCurrentPage + "/" + this.allPageSize).then((res) => {
                         this.allClubTotal = res.data.totalCount;
                         this.allClubList = res.data.data;
 
@@ -380,18 +447,19 @@
                 this.allClubCurrentPage = currentPage;
                 this.getAllClub();
             },
-            jumpClub(id){
+            jumpClub(id) {
+                location.href = "/club.html?id=" + id;
 
             },
 
             getMyClub() {
-                if (this.myClubKeyWord=== "") {
+                if (this.myClubKeyWord === "") {
                     axios.post("/belong/student/" + this.myClubCurrentPage + "/" + this.myPageSize).then((res) => {
                         this.myClubTotal = res.data.totalCount;
                         this.myClubList = res.data.data;
                     })
-                }else{
-                    axios.post("/belong/searchStudent/"+ this.myClubKeyWord + "/" + this.myClubCurrentPage + "/" + this.myPageSize).then((res) => {
+                } else {
+                    axios.post("/belong/searchStudent/" + this.myClubKeyWord + "/" + this.myClubCurrentPage + "/" + this.myPageSize).then((res) => {
                         this.myClubTotal = res.data.totalCount;
                         this.myClubList = res.data.data;
 
@@ -405,15 +473,14 @@
             },
 
 
-
             getMyActivity() {
-                if (this.myActivityKeyWord=== "") {
+                if (this.myActivityKeyWord === "") {
                     axios.post("/join/student/" + this.myActivityCurrentPage + "/" + this.myPageSize).then((res) => {
                         this.myActivityTotal = res.data.totalCount;
                         this.myActivityList = res.data.data;
                     })
-                }else{
-                    axios.post("/join/searchStudent/"+ this.myActivityKeyWord + "/" + this.myActivityCurrentPage + "/" + this.myPageSize).then((res) => {
+                } else {
+                    axios.post("/join/searchStudent/" + this.myActivityKeyWord + "/" + this.myActivityCurrentPage + "/" + this.myPageSize).then((res) => {
                         this.myActivityTotal = res.data.totalCount;
                         this.myActivityList = res.data.data;
 
@@ -427,15 +494,14 @@
             },
 
 
-
             getAllActivity() {
-                if (this.allActivityKeyWord=== "") {
+                if (this.allActivityKeyWord === "") {
                     axios.post("/activity/all/" + this.allActivityCurrentPage + "/" + this.allPageSize).then((res) => {
                         this.allActivityTotal = res.data.totalCount;
                         this.allActivityList = res.data.data;
                     })
-                }else{
-                    axios.post("/activity/search/"+ this.allActivityKeyWord + "/" + this.allActivityCurrentPage + "/" + this.allPageSize).then((res) => {
+                } else {
+                    axios.post("/activity/search/" + this.allActivityKeyWord + "/" + this.allActivityCurrentPage + "/" + this.allPageSize).then((res) => {
                         this.allActivityTotal = res.data.totalCount;
                         this.allActivityList = res.data.data;
 
@@ -448,10 +514,16 @@
                 this.getAllActivity();
             },
 
-            jumpActivity(id){
+            jumpActivity(id) {
+                location.href = "/activity.html" + "?id=" + id;
 
             },
-
+            jumpCreate() {
+                location.href = "/createClub.html";
+            },
+            jumpPerson() {
+                location.href = "/changeInfo.html";
+            }
 
 
         },

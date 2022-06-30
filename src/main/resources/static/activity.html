@@ -8,195 +8,230 @@
     <script src="./js/axios-0.18.0.js"></script>
     <link rel="stylesheet" href="./js/element-ui/lib/theme-chalk/index.css">
     <script src="./js/element-ui/lib/index.js"></script>
-    <title>登录</title>
+    <title>查看活动</title>
+    <style>
+        .el-carousel__item h3 {
+            color: #475669;
+            font-size: 14px;
+            opacity: 0.75;
+            line-height: 200px;
+            margin: 0;
+        }
+
+        .el-carousel__item:nth-child(2n) {
+            background-color: #99a9bf;
+        }
+
+        .el-carousel__item:nth-child(2n+1) {
+            background-color: #d3dce6;
+        }
+
+        .text {
+            font-size: 14px;
+        }
+
+        .item {
+            margin-bottom: 18px;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            content: "";
+        }
+
+        .clearfix:after {
+            clear: both
+        }
+
+        .box-card2 {
+            width: 50%;
+            height: 500px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            float: right;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body style="background-color: #f7f7f7">
 <div id="app">
     <div class="container mt-5">
-    <el-container>
-        <el-header><h2 class="text-center">“二货”交易平台</h2></el-header>
-        <el-main>
-            <div class="container w-50">
-            <el-tabs type="border-card" :stretch="true" style="border-radius: 4px">
+        <el-container>
+            <el-header>
+                <div>
+                    <el-button type="info" @click="myreturn()">返回</el-button>
+                </div>
+                <h3 class="text-center">{{activity.name}}</h3>
 
-    <!--            登录-->
-                <el-tab-pane label="登录" class="text-center">
-                    <el-avatar size="large" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
-                    <el-input class="mt-3"  v-model.number="login_student.phone" placeholder="请输入手机号"
-                              prefix-icon="el-icon-mobile-phone"></el-input>
-                    <el-input class="mt-3"  v-model="login_student.password" placeholder="请输入密码" show-password
-                              prefix-icon="el-icon-lock"></el-input>
-                    <el-button class="mt-3 w-25 fs-5" type="primary" @click="login()">登录</el-button>
-                </el-tab-pane>
+            </el-header>
+            <el-main>
+                <div align="center">
+                    <el-button type="info" v-show="isjoin==0">请先加入社团</el-button>
+                    <el-button type="success" v-show="isjoin==1" @click="addActivity()">参加活动</el-button>
+                    <el-button type="warning" v-show="isjoin==2" @click="exitActivity()">退出活动</el-button>
+                </div>
+                <div>
+                    <el-row>
+                        <el-col :span="20"><h2>活动详情：</h2></el-col>
+                    </el-row>
+                    {{activity.introduction}}
+                </div>
+                <div align="center">
+                    <img src="/img/activity.png" style=" height:500px;width:800px"/>
+                </div>
 
+                <el-divider></el-divider>
 
-                <!--注册-->
-                <el-tab-pane label="注册" class="text-center">
-                    <el-input class="mt-3"  v-model.number="register_student.phone" placeholder="请输入手机号"
-                              prefix-icon="el-icon-mobile-phone"></el-input>
-                    <el-input class="mt-3"  v-model="register_student.password" placeholder="请输入密码" show-password
-                              prefix-icon="el-icon-lock"></el-input>
-                    <el-input class="mt-3"  v-model.number="register_student.name" placeholder="请输入真实姓名"
-                              prefix-icon="el-icon-user"></el-input>
-                    <el-button class="mt-3 w-25 fs-5" plain @click="register()">注册</el-button>
-                </el-tab-pane>
+                <el-col :span="24">
+                    <el-card class="box-card2">
+                        <div slot="header" class="clearfix">
+                            <el-col :span="10">
+                                <strong>报名学生</strong>
+                            </el-col>
+                            <el-col :span="10">
+                                <el-input v-model="studentKeyWord" placeholder="请输入内容"></el-input>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-button type="primary" icon="el-icon-search" @click="getActivityStudent()"
+                                           class="w-100">搜索
+                                </el-button>
+                            </el-col>
+                        </div>
+                        <div>
+                            <template>
+                                <el-table
+                                        :data="studentList"
+                                >
+                                    <el-table-column
+                                            type="index"
+                                            width="150">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="name"
+                                            label="姓名"
+                                            width="200">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="操作">
+                                        <template slot-scope="scope">
+                                            <el-button type="primary" size="mini"
+                                                       @click="jumpStudent(scope.row.studentId)">
+                                                查看
+                                            </el-button>
+                                        </template>
+                                    </el-table-column>
 
+                                </el-table>
+                            </template>
+                        </div>
+                        <div class="container my-5" align="center">
+                            <template>
+                                <div class="block">
+                                    <el-pagination
+                                            @current-change="changeStudentPage"
+                                            :page-size="pageSize"
+                                            layout="total, prev, pager, next"
+                                            :total="studentTotal">
+                                    </el-pagination>
+                                </div>
+                            </template>
+                        </div>
 
-                <!--管理员登录-->
-                <el-tab-pane label="管理员登录" class="text-center">
-                    <el-input class="mt-3"  v-model.number="admin.name" placeholder="请输入用户名"
-                              prefix-icon="el-icon-user"></el-input>
-                    <el-input class="mt-3"  v-model="admin.password" placeholder="请输入密码" show-password
-                              prefix-icon="el-icon-lock"></el-input>
-                    <el-button class="mt-3 w-25 fs-5" type="primary" plain @click="adminLogin()">登录</el-button>
-                </el-tab-pane>
-            </el-tabs>
+                    </el-card>
+                </el-col>
 
-                
-            </div>
-        </el-main>
-    </el-container>
+                </el-row>
+            </el-main>
+        </el-container>
     </div>
 </div>
 </body>
 <script>
     new Vue({
-        el:'#app',
-        data:{
-            login_student:{},
-            register_student:{},
-            admin:{},
+        el: '#app',
+        data: {
+            activity: {},
+            studentCurrentPage: 1,
+            studentTotal: 0,
+            studentKeyWord: "",
+            isjoin: 0,
+            pageSize: 5,
+            studentList: [],
+            clubId: 0,
+            activityId: 0
         },
-        created(){
+        mounted() {
 
+            let search = window.location.search
+            search = search.substr(1)
+            let params = search.split("=")
+            let id = params[1]
+            this.activityId = id;
+            axios.get("/activity/" + this.activityId).then((res) => {
+                this.activity = res.data;
+            })
+            this.getActivityStudent();
+            this.isJoin();
+            console.log(this.isjoin)
         },
-        methods:{
-            login(){
-                if(!this.login_student.phone){
+        methods: {
+            myreturn() {
+                window.history.back(-1);
+            },
+            getActivityStudent() {
+                if (this.studentKeyWord === "") {
+                    axios.get("/join/" + this.activityId + "/" + this.studentCurrentPage + "/" + this.pageSize).then((res) => {
+                        this.studentList = res.data.data;
+                        this.studentTotal = res.data.totalCount;
+                    })
+                } else {
+                    axios.get("/join/search/" + this.activityId + "/" + this.studentKeyWord + "/" + this.studentCurrentPage + "/" + this.pageSize).then((res) => {
+                        this.studentList = res.data.data;
+                        this.studentTotal = res.data.totalCount;
+                    })
+
+                }
+            },
+
+            isJoin() {
+                axios.get("/join/isJoin" + "/" + this.activityId).then((res) => {
+                    this.isjoin = res.data;
+                })
+
+            },
+            changeStudentPage(currentPage) {
+                this.studentCurrentPage = currentPage;
+                this.getActivityStudent();
+            },
+
+            addActivity() {
+                axios.get("/join/add/" + this.activityId).then((res) => {
                     this.$message({
                         showClose: true,
-                        message: '未填写手机号',
-                        type: 'error'
+                        message: '操作成功',
+                        type: 'success'
                     })
-                    return
-                }
-                if(!this.login_student.password){
+                    setTimeout("location.reload()", 1000)
+
+                })
+
+            },
+            exitActivity() {
+                axios.get("/join/delete/" + this.activityId).then((res) => {
                     this.$message({
                         showClose: true,
-                        message: '未填写密码',
-                        type: 'error'
+                        message: '操作成功',
+                        type: 'success'
                     })
-                    return
-                }
-                axios.post("/student/login",this.login_student).then((res)=>{
-                    if(res.data!==""){
-                        //登录成功跳转页面
-                        this.$message({
-                            showClose: true,
-                            message: '登录成功',
-                            type: 'success'
-                        })
-                        setTimeout("location.href=\"/goods.html\"",1000)
-                    }
-                    else{
-                        //登录失败
-                        this.$message({
-                            showClose: true,
-                            message: '用户名或密码错误',
-                            type: 'error'
-                        });
-                    }
+                    setTimeout("location.reload()", 1000)
                 })
             },
-            register(){
-                if(!this.register_student.name){
-                    this.$message({
-                        showClose: true,
-                        message: '未填写姓名',
-                        type: 'error'
-                    })
-                    return
-                }
-                if(!this.register_student.password){
-                    this.$message({
-                        showClose: true,
-                        message: '未填写密码',
-                        type: 'error'
-                    })
-                    return
-                }
-                if(!this.register_student.phone){
-                    this.$message({
-                        showClose: true,
-                        message: '未填写手机号',
-                        type: 'error'
-                    })
-                    return
-                }
-                if(!/^[0-9]{11}$/.test(this.register_student.phone)) {
-                    this.$message({
-                        showClose: true,
-                        message: '请输入正确的手机号',
-                        type: 'error'
-                    })
-                    return
-                }
-                axios.get("student/checkStudent/"+this.register_student.phone).then((res)=>{
-                    if(res.data===1){
-                        //用户名重复
-                        this.$message({
-                            showClose: true,
-                            message: '手机号重复',
-                            type: 'warning'
-                        })
-                    }
-                    if(res.data===0){
-                        axios.post("student/register",this.register_student).then((res)=>{
-                            this.$message({
-                                showClose: true,
-                                message: '注册成功',
-                                type: 'success'
-                            })
-                        })
-                    }
-                })
-            },
-            adminLogin(){
-                if(!this.admin.name){
-                    this.$message({
-                        showClose: true,
-                        message: '未填写用户名',
-                        type: 'error'
-                    })
-                    return
-                }
-                if(!this.admin.password){
-                    this.$message({
-                        showClose: true,
-                        message: '未填写密码',
-                        type: 'error'
-                    })
-                    return
-                }
-                axios.post("/admin/login",this.admin).then((res)=>{
-                    if(res.data!==""){
-                        //登录成功跳转页面
-                        location.href="/adminJudge.html"
-                    }
-                    else{
-                        //登录失败
-                        this.$message({
-                            showClose: true,
-                            message: '用户名或密码错误',
-                            type: 'error'
-                        });
-                    }
-                })
+            jumpStudent(id) {
+                location.href = "/student.html?id=" + id;
             }
-
-
-
-
         }
     })
 </script>

@@ -43,13 +43,30 @@ public interface JoinDao {
 
 
 
+    @Select("select activity_id,J.student_id,name from tb_join as J \n" +
+            "left join tb_student as S on J.student_id = S.id \n" +
+            "where J.activity_id = #{id} limit ${(currentPage-1)*pageSize},#{pageSize}")
+    List<StudentActivity> getActivityJoin(Integer id,Integer currentPage,Integer pageSize);
+
+    @Select("select count(*) from tb_join as J left join tb_student as S on J.student_id = S.id \n" +
+            "where J.activity_id = #{id}")
+    Integer getActivityJoinSum(Integer id);
 
 
     @Select("select activity_id,J.student_id,name from tb_join as J \n" +
             "left join tb_student as S on J.student_id = S.id \n" +
-            "where J.activity_id = #{id}")
-    List<StudentActivity> getActivityJoin(Integer id);
+            "where J.activity_id = #{id} and name like CONCAT('%',#{keyWord},'%') limit ${(currentPage-1)*pageSize},#{pageSize}")
+    List<StudentActivity> searchActivityJoin(Integer id,String keyWord,Integer currentPage,Integer pageSize);
 
+
+    @Select("select count(*) from tb_join as J \n" +
+            "left join tb_student as S on J.student_id = S.id \n" +
+            "where J.activity_id = #{id} and name like CONCAT('%',#{keyWord},'%')")
+    Integer searchActivityJoinSum(Integer id,String keyWord);
+
+
+    @Select("select count(*) from tb_join where activity_id = #{activityId} and student_id = #{studentId}")
+    Integer isJoin(Integer activityId,Integer studentId);
 
 
 

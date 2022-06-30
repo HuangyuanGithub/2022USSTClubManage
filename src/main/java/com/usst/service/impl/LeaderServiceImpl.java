@@ -20,7 +20,7 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Override
     public List<LeaderStudent> getOwnClub(Integer id) {
-        return leaderDao.getClubLeader(id);
+        return leaderDao.getOwnClub(id);
     }
 
     @Override

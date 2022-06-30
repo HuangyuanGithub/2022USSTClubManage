@@ -17,3 +17,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
+
+img-path:
+  #填电脑上当前项目的文件夹
+  local: C:\Users\huangyuan\Desktop\ClubManage\src\main\resources\static\img

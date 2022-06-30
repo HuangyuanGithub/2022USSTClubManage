@@ -11,8 +11,11 @@ public interface JoinService {
 
     Page<StudentActivity> searchStudentJoin(Integer id,String keyWord,Integer currentPage,Integer pageSize);
 
-    List<StudentActivity> getActivityJoin(Integer id);
+    Page<StudentActivity> getActivityJoin(Integer id,Integer currentPage,Integer pageSize);
 
+    Page<StudentActivity> searchActivityJoin(Integer id,String keyWord,Integer currentPage,Integer pageSize);
+
+    Integer isJoin(Integer activityId,Integer studentId);
     Integer deleteJoin(Join join);
 
     Integer addJoin(Join join);

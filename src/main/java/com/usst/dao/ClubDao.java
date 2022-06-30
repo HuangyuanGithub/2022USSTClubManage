@@ -1,10 +1,7 @@
 package com.usst.dao;
 
 import com.usst.entity.Club;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -29,6 +26,13 @@ public interface ClubDao {
     @Delete("delete from tb_club where club_id = #{id}")
     Integer deleteClub(Integer id);
 
+    @Insert("insert into tb_club (club_name,introduction,student_id) values (#{clubName},#{introduction},#{studentId})")
+    Integer addClub(Club club);
 
 
+    @Update("update tb_club set introduction = #{introduction} where id = #{id}")
+    Integer clubIntro(String introduction,Integer id);
+
+    @Update("update tb_club set num = #{num}  where id = #{id}")
+    Integer clubNum(Integer num,Integer id);
 }
