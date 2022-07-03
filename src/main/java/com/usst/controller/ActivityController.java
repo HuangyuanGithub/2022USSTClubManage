@@ -50,8 +50,16 @@ public class ActivityController {
     }
 
     @PostMapping("/add")
-    public Integer addClub(@RequestBody Activity activity){
+    public Integer addClub(@RequestBody Activity activity,HttpSession session){
+        Integer studentId = (Integer) session.getAttribute("studentId");
+        activity.setStudentId(studentId);
         return activityService.addActivity(activity);
 
     }
+
+    @PostMapping("/update")
+    public Integer updateClub(@RequestBody Activity activity){
+        return activityService.updateActivity(activity);
+    }
+
 }

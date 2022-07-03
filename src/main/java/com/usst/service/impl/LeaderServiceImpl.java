@@ -30,6 +30,11 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Override
     public Integer addLeader(Integer studentId, Integer clubId) {
-        return leaderDao.deleteLeader(studentId, clubId);
+        return leaderDao.addLeader(studentId, clubId);
+    }
+
+    @Override
+    public Integer isLeader(Integer studentId, Integer clubId) {
+        return leaderDao.isLeader(studentId, clubId);
     }
 }

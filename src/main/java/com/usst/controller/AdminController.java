@@ -1,10 +1,10 @@
 package com.usst.controller;
 
+import com.usst.entity.Activity;
 import com.usst.entity.Admin;
+import com.usst.entity.Belong;
 import com.usst.entity.Club;
-import com.usst.service.AdminService;
-import com.usst.service.ClubService;
-import com.usst.service.LeaderService;
+import com.usst.service.*;
 import com.usst.utils.Page;
 import com.usst.vo.StudentActivity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,9 @@ public class AdminController {
 
     @Autowired
     private LeaderService leaderService;
+
+    @Autowired
+    private BelongService belongService;
 
     @RequestMapping("/login")
     public Integer userLogin(@RequestBody Admin admin, HttpSession session){
@@ -53,6 +56,10 @@ public class AdminController {
         Club club = clubService.getClubById(id);
         Integer studentId = club.getStudentId();
         leaderService.addLeader(studentId,id);
+        Belong belong = new Belong();
+        belong.setClubId(id);
+        belong.setStudentId(studentId);
+        belongService.addBelong(belong);
         return adminService.clubPass(id);
     }
 
@@ -61,9 +68,14 @@ public class AdminController {
         return adminService.clubNo(id);
     }
 
+    @Autowired
+    private ActivityService activityService;
+
 
     @RequestMapping("/activityPass/{id}")
     public Integer activityPass(@PathVariable Integer id){
+        Activity activity = activityService.getActivityById(id);
+
         return adminService.activityPass(id);
     }
 

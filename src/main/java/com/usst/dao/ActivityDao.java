@@ -3,10 +3,7 @@ package com.usst.dao;
 import com.usst.entity.Activity;
 import com.usst.entity.Club;
 import com.usst.vo.StudentActivity;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -60,6 +57,10 @@ public interface ActivityDao {
 
     @Insert("insert into tb_activity (name,introduction,date,club_id) values (#{name},#{introduction},#{date},#{clubId})")
     Integer addActivity(Activity activity);
+
+
+    @Update("update tb_activity set introduction = #{introduction} ,date = #{date} where id = #{id}")
+    Integer updateActivity(Activity activity);
 
 
 

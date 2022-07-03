@@ -63,4 +63,9 @@ public class ActivityServiceImpl implements ActivityService {
         return activityDao.addActivity(activity);
     }
 
+    @Override
+    public Integer updateActivity(Activity activity) {
+        return activityDao.updateActivity(activity);
+    }
+
 }

@@ -58,6 +58,12 @@ public class ClubServiceImpl implements ClubService {
         Integer num = club.getNum()+1;
         return clubDao.clubNum(num,id);
     }
+
+    public Integer clubNumDesc(Integer id) {
+        Club club = clubDao.getClubById(id);
+        Integer num = club.getNum()-1;
+        return clubDao.clubNum(num,id);
+    }
 }
 
 

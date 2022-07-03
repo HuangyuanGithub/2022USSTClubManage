@@ -20,4 +20,6 @@ public interface ClubService {
     Integer clubIntro(String introduction,Integer id);
 
     Integer clubNum(Integer id);
+
+    public Integer clubNumDesc(Integer id);
 }

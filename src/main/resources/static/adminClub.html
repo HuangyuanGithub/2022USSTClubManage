@@ -66,6 +66,8 @@
 
         <div class="container text-center mt-5 w-50">
             <el-button type="primary" class="w-25" @click="updateClub()">修改社团</el-button>
+            <el-button type="warning" class="w-25" @click="clubNo()">删除社团</el-button>
+            <el-button type="primary" class="w-25" @click="jumpCreate()">新建活动</el-button>
         </div>
 
         <el-row>
@@ -103,7 +105,6 @@
                                         <el-button type="success" size="mini" @click="passAPP(scope.row.studentId)">
                                             通过
                                         </el-button>
-
                                         <el-button type="warning" size="mini" @click="noAPP(scope.row.studentId)">
                                             禁用
                                         </el-button>
@@ -256,7 +257,6 @@
             deleActivityId:0,
             activityVisible:false,
             clubVisible:false,
-
         },
         mounted() {
             let search = window.location.search
@@ -267,14 +267,38 @@
             axios.get("/club/" + this.clubId).then((res) => {
                 this.club = res.data
             })
+            this.isLeader();
             this.getInfo();
             this.getClubStudent();
-            this.getClubActivity()
-
+            this.getClubActivity();
         },
         methods: {
             myreturn(){
                 window.history.back(-1);
+            },
+            isLeader(){
+                axios.get("/leader/isLeader/"+this.clubId).then((res)=>{
+                   if(res.data===0) location.href="/main.html"
+                })
+
+            },
+            jumpCreate() {
+                location.href="/createActivity.html?id="+this.clubId;
+            },
+            clubNo(id){
+                this.deleClubId = this.clubId;
+                this.clubVisible = true;
+            },
+            deleClub(){
+                this.activityVisible = false;
+                axios.get("/club/delete/"+this.deleClubId).then((res)=>{
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout("location.reload()",1000)
+                })
             },
             activityNo(id){
                 this.deleActivityId = id

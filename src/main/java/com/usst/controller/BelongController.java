@@ -101,6 +101,7 @@ public class BelongController {
         Belong belong = new Belong();
         belong.setStudentId(studentId);
         belong.setClubId(clubId);
+        clubService.clubNumDesc(clubId);
         return belongService.deleteBelong(belong);
     }
 

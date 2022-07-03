@@ -11,4 +11,6 @@ public interface LeaderService {
     Integer deleteLeader(Integer studentId,Integer clubId);
 
     Integer addLeader(Integer studentId,Integer clubId);
+
+    Integer isLeader(Integer studentId,Integer clubId);
 }

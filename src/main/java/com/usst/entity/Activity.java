@@ -12,5 +12,5 @@ public class Activity {
     private String introduction;
     private String date;
     private Integer flag;
-    private String studentName;
+    private Integer studentId;
 }

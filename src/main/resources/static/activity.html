@@ -144,6 +144,57 @@
                 </el-col>
 
                 </el-row>
+
+                <br><br>
+
+                <el-row>
+                    <div align="center">
+                        <h2>发表评论</h2>
+                        <el-input
+                                type="textarea"
+                                :rows="5"
+                                placeholder="请输入内容"
+                                v-model="myMessage.message">
+                        </el-input>
+                        <el-button type="primary" @click="addMessage()">发布</el-button>
+                    </div>
+                </el-row>
+                <br><br>
+                <el-row>
+                    <template>
+                        <el-table
+                                :data="messageList"
+                                style="width: 100%">
+                            <el-table-column
+                                    type="index"
+                                    width="100">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="message"
+                                    label="内容"
+                                    width="1000">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="studentName"
+                                    label="留言人">
+                            </el-table-column>
+                        </el-table>
+                    </template>
+                    <div class="container my-5" align="center">
+                        <template>
+                            <div class="block">
+                                <el-pagination
+                                        @current-change="changeMessagePage"
+                                        :page-size="pageSize"
+                                        layout="total, prev, pager, next"
+                                        :total="messageTotal">
+                                </el-pagination>
+                            </div>
+                        </template>
+                    </div>
+                </el-row>
+
+
             </el-main>
         </el-container>
     </div>
@@ -161,7 +212,12 @@
             pageSize: 5,
             studentList: [],
             clubId: 0,
-            activityId: 0
+            activityId: 0,
+
+            myMessage: {},
+            messageList: [],
+            messageCurrentPage: 1,
+            messageTotal: 0,
         },
         mounted() {
 
@@ -173,11 +229,30 @@
             axios.get("/activity/" + this.activityId).then((res) => {
                 this.activity = res.data;
             })
+
             this.getActivityStudent();
             this.isJoin();
-            console.log(this.isjoin)
+            this.getMessage();
+            this.myMessage.activityId = this.activityId;
+
         },
         methods: {
+            changeMessagePage(currentPage){
+                this.messageCurrentPage = currentPage;
+                this.getMessage();
+            },
+            addMessage(){
+
+                axios.post("/activityMessage/add" ,this.myMessage).then((res) => {
+                    this.getMessage();
+                })
+            },
+            getMessage(){
+                axios.get("/activityMessage/" + this.activityId + "/" + this.messageCurrentPage + "/" + this.pageSize).then((res) => {
+                    this.messageList = res.data.data;
+                    this.messageTotal = res.data.totalCount;
+                })
+            },
             myreturn() {
                 window.history.back(-1);
             },

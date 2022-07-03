@@ -24,7 +24,7 @@ public class ClubController {
         return clubService.getClubById(id);
     }
 
-    @RequestMapping("delete/{id}")
+    @RequestMapping("/delete/{id}")
     Integer deleteClub(@PathVariable Integer id){
         return clubService.deleteClub(id);
     }
@@ -48,7 +48,6 @@ public class ClubController {
         Integer id = (Integer) session.getAttribute("studentId");
         club.setStudentId(id);
         return clubService.addClub(club);
-
     }
 
 

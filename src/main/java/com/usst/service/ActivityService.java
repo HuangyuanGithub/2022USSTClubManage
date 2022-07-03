@@ -19,4 +19,6 @@ public interface ActivityService {
     Integer deleActivity(Integer id);
 
     Integer addActivity(Activity activity);
+
+    Integer updateActivity(Activity activity);
 }

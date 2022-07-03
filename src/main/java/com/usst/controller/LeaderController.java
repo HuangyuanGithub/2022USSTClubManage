@@ -1,5 +1,7 @@
 package com.usst.controller;
 
+import com.usst.entity.Activity;
+import com.usst.service.ActivityService;
 import com.usst.service.LeaderService;
 import com.usst.vo.LeaderStudent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,24 @@ public class LeaderController {
         Integer studentId = (Integer) session.getAttribute("studentId");
         return leaderService.addLeader(studentId,clubId);
     }
+
+
+    @RequestMapping("/isLeader/{clubId}")
+    Integer isLeader(@PathVariable Integer clubId,HttpSession session){
+        Integer studentId = (Integer) session.getAttribute("studentId");
+        return leaderService.isLeader(studentId,clubId);
+    }
+
+    @Autowired
+    private ActivityService activityService;
+
+    @RequestMapping("/isLeaderA/{activityId}")
+    Integer isLeaderA(@PathVariable Integer activityId,HttpSession session){
+        Integer studentId = (Integer) session.getAttribute("studentId");
+        Activity activity = activityService.getActivityById(activityId);
+        return leaderService.isLeader(studentId,activity.getClubId());
+    }
+
 
 
 }

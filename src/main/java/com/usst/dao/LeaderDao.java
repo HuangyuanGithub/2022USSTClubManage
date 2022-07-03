@@ -28,6 +28,9 @@ public interface LeaderDao {
     @Insert("insert into tb_leader (student_id,club_id) values (#{studentId},#{clubId})")
     Integer addLeader(Integer studentId,Integer clubId);
 
+    @Select("select count(*) from tb_leader where student_id = #{studentId} and club_id = #{clubId}")
+    Integer isLeader(Integer studentId,Integer clubId);
+
 
 
 }

@@ -23,7 +23,7 @@ public interface ClubDao {
     @Select("select * from tb_club where id = #{id}")
     Club getClubById(Integer id);
 
-    @Delete("delete from tb_club where club_id = #{id}")
+    @Delete("delete from tb_club where id = #{id}")
     Integer deleteClub(Integer id);
 
     @Insert("insert into tb_club (club_name,introduction,student_id) values (#{clubName},#{introduction},#{studentId})")
