@@ -10,6 +10,29 @@
     <script src="./js/element-ui/lib/index.js"></script>
     <title>学生主页</title>
     <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+        }
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
         .text {
             font-size: 14px;
         }
@@ -41,7 +64,7 @@
     <el-container>
         <el-header>
             <div>
-                <el-button type="info"  @click="myreturn()">返回</el-button>
+                <el-button type="info" @click="myreturn()">返回</el-button>
             </div>
             <div align="center">
                 <h2>管理社团</h2><br>
@@ -52,10 +75,12 @@
         </el-header>
         <el-main>
             <div class="container w-50">
-                社团介绍：<el-input
-                    type="textarea"
-                    :rows="5"
-                    v-model="club.introduction" placeholder="请输入内容"></el-input><br>
+                社团介绍：
+                <el-input
+                        type="textarea"
+                        :rows="5"
+                        v-model="club.introduction" placeholder="请输入内容"></el-input>
+                <br>
 
 
             </div>
@@ -207,6 +232,58 @@
             </el-col>
         </el-row>
 
+        <div align="center">
+            <h3>上传图片</h3>
+
+            <el-upload
+                    class="upload-demo"
+                    ref="cover"
+                    drag
+                    :action="action"
+                    name="file"
+                    :limit="1"
+                    list-type="picture"
+                    :on-change="onCoverChange">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text fw-bold">请上传图片</div>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__text">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+        </div>
+
+
+        <div align="center">
+            <template>
+                <el-table
+                        :data="imgList"
+                        style="width: 50%">
+                    <el-table-column
+                            type="index"
+                            width="100">
+                    </el-table-column>
+                    <el-table-column
+                            label="图片"
+                            width="300">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.path" style="width: 250px;height: 250px"/>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="success" size="mini" @click="deleImg(scope.row.id)">
+                                删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+
+        </div>
+
+
+
+
         </el-main>
     </el-container>
 
@@ -214,7 +291,7 @@
             title="提示"
             :visible.sync="clubVisible"
             width="30%"
-            >
+    >
         <span>是否删除？</span>
         <span slot="footer" class="dialog-footer">
     <el-button @click="clubVisible = false">取 消</el-button>
@@ -223,12 +300,11 @@
     </el-dialog>
 
 
-
     <el-dialog
             title="提示"
             :visible.sync="activityVisible"
             width="30%"
-            >
+    >
         <span>是否删除</span>
         <span slot="footer" class="dialog-footer">
     <el-button @click="activityVisible = false">取 消</el-button>
@@ -242,8 +318,8 @@
     new Vue({
         el: '#app',
         data: {
-            club:{},
-            clubId:0,
+            club: {},
+            clubId: 0,
             activityList: [],
             studentList: [],
             activityCurrentPage: 1,
@@ -253,10 +329,15 @@
             studentCurrentPage: 1,
             studentTotal: 0,
 
-            deleClubId:0,
-            deleActivityId:0,
-            activityVisible:false,
-            clubVisible:false,
+            deleClubId: 0,
+            deleActivityId: 0,
+            activityVisible: false,
+            clubVisible: false,
+            imageUrl:"",
+            cover:[],
+            imgList:[],
+
+            action:"/clubImg/add/",
         },
         mounted() {
             let search = window.location.search
@@ -271,60 +352,79 @@
             this.getInfo();
             this.getClubStudent();
             this.getClubActivity();
+            this.getImgList();
+            this.action +=this.clubId;
         },
         methods: {
-            myreturn(){
+            deleImg(id){
+                axios.get("/clubImg/delete/" + id).then((res) => {
+                    location.reload();
+                })
+            },
+
+            getImgList(){
+                axios.get("/clubImg/" + this.clubId).then((res) => {
+                    this.imgList = res.data;
+                })
+            },
+
+            onCoverChange(file,fileList){
+                this.cover=fileList;
+                location.reload();
+            },
+
+            myreturn() {
                 window.history.back(-1);
             },
-            isLeader(){
-                axios.get("/leader/isLeader/"+this.clubId).then((res)=>{
-                   if(res.data===0) location.href="/main.html"
+            isLeader() {
+                axios.get("/leader/isLeader/" + this.clubId).then((res) => {
+                    if (res.data === 0) location.href = "/main.html"
                 })
 
             },
             jumpCreate() {
-                location.href="/createActivity.html?id="+this.clubId;
+                location.href = "/createActivity.html?id=" + this.clubId;
             },
-            clubNo(id){
+            clubNo(id) {
                 this.deleClubId = this.clubId;
                 this.clubVisible = true;
             },
-            deleClub(){
+            deleClub() {
                 this.activityVisible = false;
-                axios.get("/club/delete/"+this.deleClubId).then((res)=>{
+                axios.get("/club/delete/" + this.deleClubId).then((res) => {
                     this.$message({
                         showClose: true,
                         message: '操作成功',
                         type: 'success'
                     })
-                    setTimeout("location.reload()",1000)
+                    setTimeout("location.reload()", 1000)
                 })
             },
-            activityNo(id){
+            activityNo(id) {
                 this.deleActivityId = id
                 this.activityVisible = true;
 
             },
-            deleActivity(){
+            deleActivity() {
                 this.activityVisible = false;
-                axios.get("/activity/delete/"+this.deleActivityId).then((res)=>{
+                axios.get("/activity/delete/" + this.deleActivityId).then((res) => {
                     this.$message({
                         showClose: true,
                         message: '操作成功',
                         type: 'success'
                     })
-                    setTimeout("location.reload()",1000)
+                    setTimeout("location.reload()", 1000)
                 })
 
             },
-            activityChange(id){
-                location.href="/adminActivity.html?id="+id;
+            activityChange(id) {
+                location.href = "/adminActivity.html?id=" + id;
             },
-            jumpStudent(id){
-              location.href="/student.html?id="+id;
+            jumpStudent(id) {
+                location.href = "/student.html?id=" + id;
             },
-            jumpActivity(id){
-                location.href="/activity.html?id="+id;
+            jumpActivity(id) {
+                location.href = "/activity.html?id=" + id;
             },
             changeActivityPage(currentPage) {
                 this.activityCurrentPage = currentPage;
@@ -334,33 +434,33 @@
                 this.studentCurrentPage = currentPage;
                 this.getClubStudent();
             },
-            onDetailsChange(file,fileList){
-                this.detailsList=fileList
+            onDetailsChange(file, fileList) {
+                this.detailsList = fileList
             },
-            getInfo(){
-                axios.get("/club/"+this.clubId).then((res)=>{
+            getInfo() {
+                axios.get("/club/" + this.clubId).then((res) => {
                     this.club = res.data;
                 })
 
             },
-            passAPP(id){
-                axios.get("/belong/pass/"+this.clubId+"/"+id).then((res)=>{
+            passAPP(id) {
+                axios.get("/belong/pass/" + this.clubId + "/" + id).then((res) => {
                     this.$message({
                         showClose: true,
                         message: '操作成功',
                         type: 'success'
                     })
-                    setTimeout("location.reload()",1000)
+                    setTimeout("location.reload()", 1000)
                 })
             },
-            noAPP(id){
-                axios.get("/belong/no/"+this.clubId+"/"+id).then((res)=>{
+            noAPP(id) {
+                axios.get("/belong/no/" + this.clubId + "/" + id).then((res) => {
                     this.$message({
                         showClose: true,
                         message: '操作成功',
                         type: 'success'
                     })
-                    setTimeout("location.reload()",1000)
+                    setTimeout("location.reload()", 1000)
                 })
             },
             getClubActivity() {
@@ -379,10 +479,10 @@
 
             getClubStudent() {
 
-                    axios.get("/belong/clubAPP/" + this.clubId + "/" + this.studentCurrentPage + "/" + this.pageSize).then((res) => {
-                        this.studentList = res.data.data;
-                        this.studentTotal = res.data.totalCount;
-                    })
+                axios.get("/belong/clubAPP/" + this.clubId + "/" + this.studentCurrentPage + "/" + this.pageSize).then((res) => {
+                    this.studentList = res.data.data;
+                    this.studentTotal = res.data.totalCount;
+                })
 
             },
 
@@ -398,14 +498,14 @@
                     return
                 }
 
-                if(flag){
-                    axios.get("/club/intro"+"/"+this.club.introduction+"/"+this.clubId).then((res)=>{
+                if (flag) {
+                    axios.get("/club/intro" + "/" + this.club.introduction + "/" + this.clubId).then((res) => {
                         this.$message({
                             showClose: true,
                             message: '操作成功',
                             type: 'success'
                         })
-                        setTimeout("location.reload()",1000)
+                        setTimeout("location.reload()", 1000)
 
                     })
                 }

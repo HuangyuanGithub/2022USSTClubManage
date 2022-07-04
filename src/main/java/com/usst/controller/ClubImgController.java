@@ -29,8 +29,9 @@ public class ClubImgController {
     }
 
     @RequestMapping("/add/{clubId}")
-    public void addClubImg(@RequestParam(value = "file", required = false) MultipartFile file, @PathVariable Integer clubId) throws Exception {
+    public void addClubImg(@PathVariable Integer clubId,@RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
 
+        System.out.println("图片保存");
         String name = randomSequence(16) + ".jpg";
         ClubImg clubImg = new ClubImg();
         clubImg.setClubId(clubId);
@@ -38,7 +39,7 @@ public class ClubImgController {
         clubImgService.addClubImg(clubImg);
         InputStream in = file.getInputStream();
 
-        String path = System.getProperty("user.dir") + "/img/headImg/";
+        String path = System.getProperty("user.dir") + "/src/main/resources/static/img/club/";
         System.out.println(path);
         File mkdir = new File(path);
         if (!mkdir.exists()) {
@@ -54,8 +55,8 @@ public class ClubImgController {
         os.close();
     }
 
-    @RequestMapping("/dele/{id}")
-    public Integer deleClubImg(Integer id){
+    @RequestMapping("/delete/{id}")
+    public Integer deleClubImg(@PathVariable Integer id){
         return clubImgService.deleClubImg(id);
     }
 

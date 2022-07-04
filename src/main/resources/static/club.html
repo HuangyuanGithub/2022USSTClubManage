@@ -81,7 +81,17 @@
                 </div>
 
                 <div align="center">
-                    <img src="/img/club.png" style=" height:500px;width:800px"/>
+
+                    <template>
+                        <el-carousel :interval="4000" type="card" height="500px">
+                            <el-carousel-item v-for="item in imgList" :key="item.path">
+                                <h3 class="medium">
+                                    <img :src="item.path" height="100%" width="100%"/>
+                                </h3>
+                            </el-carousel-item>
+                        </el-carousel>
+                    </template>
+
                 </div>
 
 

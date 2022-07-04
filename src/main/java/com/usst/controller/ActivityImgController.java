@@ -35,11 +35,11 @@ public class ActivityImgController {
         String name = randomSequence(16) + ".jpg";
         ActivityImg activityImg = new ActivityImg();
         activityImg.setActivityId(activityId);
-        activityImg.setPath("img/activity/" + name);
+        activityImg.setPath("/img/activity/" + name);
         activityImgService.addActivityImg(activityImg);
         InputStream in = file.getInputStream();
 
-        String path = System.getProperty("user.dir") + "/img/headImg/";
+        String path = System.getProperty("user.dir") + "/src/main/resources/static/img/activity/";
         System.out.println(path);
         File mkdir = new File(path);
         if (!mkdir.exists()) {
@@ -55,8 +55,8 @@ public class ActivityImgController {
         os.close();
     }
 
-    @RequestMapping("/dele/{id}")
-    public Integer deleActivityImg(Integer id){
+    @RequestMapping("/delete/{id}")
+    public Integer deleActivityImg(@PathVariable Integer id){
         return activityImgService.deleActivityImg(id);
     }
 

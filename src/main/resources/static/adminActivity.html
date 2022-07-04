@@ -45,6 +45,58 @@
         <div class="container text-center mt-5 w-50">
             <el-button type="primary" class="w-25" @click="updateActivity()">修改活动</el-button>
         </div>
+
+        <div align="center">
+            <h3>上传图片</h3>
+
+            <el-upload
+                    class="upload-demo"
+                    ref="cover"
+                    drag
+                    :action="action"
+                    name="file"
+                    :limit="1"
+                    list-type="picture"
+                    :on-change="onCoverChange">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text fw-bold">请上传图片</div>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__text">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+        </div>
+
+
+        <div align="center">
+            <template>
+                <el-table
+                        :data="imgList"
+                        style="width: 50%">
+                    <el-table-column
+                            type="index"
+                            width="100">
+                    </el-table-column>
+                    <el-table-column
+                            label="图片"
+                            width="300">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.path" style="width: 250px;height: 250px"/>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="success" size="mini" @click="deleImg(scope.row.id)">
+                                删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+
+        </div>
+
+
+
         </el-main>
     </el-container>
 
@@ -55,11 +107,16 @@
     new Vue({
         el: '#app',
         data: {
-            imgList:[],
             detailsList:[],
             activity:{},
             activityId:0,
             clubId:0,
+
+            imageUrl:"",
+            cover:[],
+            imgList:[],
+
+            action:"/activityImg/add/",
         },
         mounted() {
             let search = window.location.search
@@ -69,10 +126,34 @@
             this.activity.id = id;
             this.activityId = id;
             this.isLeader();
-            this.getinfro()
+            this.getinfro();
+
+            this.getImgList();
+            this.action +=this.activityId;
 
         },
         methods: {
+            deleImg(id){
+                axios.get("/activityImg/delete/" + id).then((res) => {
+                    this.$message({
+                        showClose: true,
+                        message: '操作成功',
+                        type: 'success'
+                    })
+                    setTimeout("location.reload()",1000)
+                })
+            },
+
+            getImgList(){
+                axios.get("/activityImg/" + this.activityId).then((res) => {
+                    this.imgList = res.data;
+                })
+            },
+
+            onCoverChange(file,fileList){
+                this.cover=fileList;
+                location.reload();
+            },
             isLeader(){
                 axios.get("/leader/isLeaderA/"+this.activityId).then((res)=>{
                     if(res.data===0) location.href="/main.html"
